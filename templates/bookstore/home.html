@@ -11,58 +11,208 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Hello, world!</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet">
+
+    <!-- jQuery and fancybox -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+    <title>Online Bookstore System | OBS</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
+    <header>
+        <div class="obs-toolbar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- Reserve for links -->
+                    </div>
+                    <div class="col-sm-6 obs-toolbar-r">
+                        <a data-fancybox data-src="#obs-login-modal" data-modal="true" href="javascript:;"><i
+                                class="fas fa-sign-in-alt"></i> Login</a>
+                        <div style="display: none;min-width:600px;" id="obs-login-modal">
+                            <h2>Login</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email address</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Password</label>
+                                    <input type="password" class="form-control" id="exampleInputPassword1">
+                                </div>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                    <label class="form-check-label" for="remember">Remember me</label>
+                                </div>
+                                <button type="submit" class="btn obs-search-button">Login</button>
+                                <button data-fancybox-close class="btn obs-search-button">Cancel</button>
+                            </form>
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
+                        <a data-fancybox data-src="#obs-signup-modal" data-modal="true" href="javascript:;"><i
+                                class="fas fa-user-plus"></i> Signup</a>
+                        <div style="display: none;min-width:600px;" id="obs-signup-modal">
+                            <h2>Signup</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email address</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Password</label>
+                                    <input type="password" class="form-control" id="exampleInputPassword1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Password (Again)</label>
+                                    <input type="password" class="form-control" id="exampleInputPassword1">
+                                </div>
+                                <button type="submit" class="btn obs-search-button">Signup</button>
+                                <button data-fancybox-close class="btn obs-search-button">Cancel</button>
+                            </form>
+                            <form action="/action_page.php">
+                                <div class="container">
+                                    <h1>Register</h1>
+                                    <p>Please fill in this form to create an account.</p>
+                                    <hr>
+
+                                    <label for="email"><b>Email</b></label>
+                                    <input type="text" placeholder="Enter Email" name="email" required>
+
+                                    <label for="psw"><b>Password</b></label>
+                                    <input type="password" placeholder="Enter Password" name="psw" required>
+
+                                    <label for="psw-repeat"><b>Repeat Password</b></label>
+                                    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+                                    <hr>
+                                    <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+
+                                    <button type="submit" class="registerbtn">Register</button>
+                                </div>
+
+                                <div class="container signin">
+                                    <p>Already have an account? <a href="#">Sign in</a>.</p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
+        <div>
+
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">OBS</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline">
+                        <input class="form-control obs-search" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn my-sm-0 obs-search-button" type="submit">Search</button>
+                        <button class="btn my-sm-0 obs-search-button" style="border-left: 1px solid white">Advanced
+                            Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
 
     <main>
-        <div class="container">
-            <h1>Hello, world!</h1>
+        <div class="container obs-container">
+            <h2>New Arrivals</h2>
+            <div class="row">
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+            </div>
+
+            <h2>Featured Books</h2>
+            <div class="row">
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+                <div class="col-md-4 obs-book-display">
+                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                </div>
+            </div>
         </div>
     </main>
 
     <footer>
-
+        <div class="obs-footer-up">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4"><h3>Title</h3></div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="obs-footer-down">
+            <div>
+                <img class="obs-accepted-cards" src="image/credit-cards-accepted.png" />
+            </div>
+            Copyright © 2020 Online Bookstore System. All Rights Reserved.
+        </div>
     </footer>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
