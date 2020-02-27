@@ -120,6 +120,7 @@ footer a, footer a:active, footer a:hover {
 .obs-checkout-cart{
     border: 1px solid rgba(0,0,0,.125);
     margin-bottom: 20px;
+    padding: 10px;
 }
 
 .obs-checkout-cart-item{
@@ -128,6 +129,6 @@ footer a, footer a:active, footer a:hover {
 
 .obs-checkout-cart-item-mod {
     width: 100%;
-    border-top: 1px solid rgba(0,0,0,.125);
+    padding-bottom: 10px;
     border-bottom: 1px solid rgba(0,0,0,.125);
 }
