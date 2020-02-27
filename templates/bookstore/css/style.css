@@ -4,7 +4,6 @@
  */
 
 html {
-    height: 100%;
     box-sizing: border-box;
 }
 
@@ -14,9 +13,10 @@ html {
 
 body {
     position: relative;
-    min-height: 100vh;
+    min-height: calc(100vh - 200px);
     background-color: #eeeeee;
 }
+
 
 footer {
     background-color: #efefef;
@@ -24,6 +24,11 @@ footer {
     bottom: 0;
     width: 100%;
     height: 0rem;
+}
+
+footer a, footer a:active, footer a:hover {
+    color: white;
+    text-decoration: none;
 }
 
 .obs-toolbar {
@@ -41,11 +46,7 @@ footer {
     text-decoration: none;
 }
 
-.obs-toolbar a:active {
-    background-color: #393e46;
-}
-
-.obs-toolbar a:hover {
+.obs-toolbar a:active, .obs-toolbar a:hover {
     background-color: #393e46;
 }
 
@@ -57,6 +58,12 @@ footer {
     background-color: #393e46;
     padding: 40px;
     margin-top: 40px;
+    color:white;
+}
+
+.obs-footer-up ul{
+    list-style-type: none;
+    padding: 0;
 }
 
 .obs-footer-down {
@@ -67,21 +74,21 @@ footer {
     box-shadow: 0px -10px 60px rgba(0, 0, 0, 0.3);
 }
 
-.obs-search, .obs-search-button {
-    border-radius: 0%;
+.obs-search, .obs-search-button, .obs-button-primary, .btn, input {
+    border-radius: 0% !important;
 }
 
-.obs-search:focus, .obs-search-button:focus {
+.obs-search:focus, .obs-search-button:focus, .obs-button-primary:focus, .btn:focus, input:focus {
     outline: none;
     box-shadow: none;
 }
 
-.obs-search-button {
+.obs-search-button, .obs-button-primary {
     background-color: #222831;
     color: white;
 }
 
-.obs-search-button:hover {
+.obs-search-button:hover, .obs-button-primary:hover {
     background-color: #393e46;
     color: white;
 }
@@ -95,6 +102,7 @@ footer {
 .obs-accepted-cards {
     max-width: 100%;
     max-height: 40px;
+    /*filter: grayscale(100%);*/
 }
 
 .obs-book-display {
@@ -103,4 +111,23 @@ footer {
 
 .obs-book-display img {
     width: 100%;
+}
+
+.obs-checked {
+    color: orange;
+}
+
+.obs-checkout-cart{
+    border: 1px solid rgba(0,0,0,.125);
+    margin-bottom: 20px;
+}
+
+.obs-checkout-cart-item{
+
+}
+
+.obs-checkout-cart-item-mod {
+    width: 100%;
+    border-top: 1px solid rgba(0,0,0,.125);
+    border-bottom: 1px solid rgba(0,0,0,.125);
 }
