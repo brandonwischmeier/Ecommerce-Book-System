@@ -38,7 +38,7 @@
                             <h2>Login</h2>
                             <form>
                                 <div class="form-group">
-                                    <label for="InputEmail1">Email address / User ID (Required)</label>
+                                    <label for="InputEmail1">Email address (Required)</label>
                                     <input type="email" class="form-control" id="InputEmail1" required>
                                 </div>
                                 <div class="form-group">
@@ -48,12 +48,9 @@
                                 <div class="form-group form-check">
                                     <input type="checkbox" class="form-check-input" id="Check1">
                                     <label class="form-check-label" for="remember">Remember me</label>
-                                    <br>
                                 </div>
                                 <button type="submit" class="btn obs-button-primary">Login</button>
                                 <button data-fancybox-close class="btn obs-button-primary">Cancel</button>
-                                <br>
-                                <a href="#">Forget password?</a>
                             </form>
                         </div>
                         <a herf="#"><i class="fas fa-user-plus"></i> Register</a>
@@ -95,47 +92,62 @@
 
     <main>
         <div class="container obs-container">
-            <h2>Book Details</h2>
+            <h2>Manage Promotion</h2>
             <hr>
-            <div class="row">
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <input type="text" class="form-control" id="validationDefault01" placeholder="Code" value=""
+                        required>
                 </div>
-                <div class="col-md-9">
-                    <h2>Elements of Programming Interviews in Python: The Insiders' Guide</h2>
-                    <span class="fa fa-star obs-checked"></span>
-                    <span class="fa fa-star obs-checked"></span>
-                    <span class="fa fa-star obs-checked"></span>
-                    <span class="fa fa-star obs-checked"></span>
-                    <span class="fa fa-star"></span>
-                    <p style="font-size: 25px;">$35.96</p>
-                    <strong>Description:</strong>
-                    <br>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua. Viverra accumsan in nisl nisi scelerisque eu ultrices vitae
-                        auctor. Quam viverra orci sagittis eu. Sit amet dictum sit amet justo. Donec pretium vulputate
-                        sapien nec sagittis aliquam. Rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt
-                        lobortis feugiat.</p>
-                    <form class="form-inline">
-                        <div class="form-group mb-2">
-                            <input type="number" class="form-control" id="bookquantity" name="bookquantity" min="1"
-                                value="1">
+                <div class="input-group col-md-4 mb-3">
+                    <input type="text" class="form-control" 
+                        aria-label="off" aria-describedby="basic-addon2" placeholder="10">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">% OFF</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <input type="text" class="form-control" id="validationDefault02" placeholder="Expiration Date (02/02/2020)" value=""
+                        required>
+                </div>
+            </div>
+            <button type="button" class="btn obs-button-primary btn-lg btn-block">Add New Promotion</button>
+            <hr>
+            <form class="form-inline">
+                <div class="col-sm-9">
+                    <input class="form-control obs-search" style="width: 100%;" type="search" placeholder="Search"
+                        aria-label="Search">
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn my-sm-0 obs-search-button" style="width: 100%;" type="submit">Search</button>
+                </div>
+            </form>
+            <hr>
+
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-lg-12">
+                        <div class="card-body">
+                            <h5 class="card-title">20% Off All-store</h5>
+                            <p class="card-text">Code: 2020OFF<br>Expires: 05/20/2020</p>
+                            <button class="btn obs-button-primary">Edit</button>
+                            <button class="btn obs-button-primary">Delete</button>
                         </div>
-                        <button type="submit" class="btn obs-button-primary mb-2 mx-sm-3">Add to Cart</button>
-                    </form>
+                    </div>
                 </div>
-                <ul>
-                    <li>ISBN-10: 1537713949</li>
-                    <li>ISBN-13: 978-1537713946</li>
-                    <li>Category: Programming</li>
-                    <li>Author: Adnan Aziz </li>
-                    <li>Edition: 2nd</li>
-                    <li>Publisher: CreateSpace Independent Publishing Platform</li>
-                    <li>Publication Year: September 15, 2016</li>
-                    <li>Quantity-in-Stock: 5,000</li>
-                    <li>Minimum Threshold: 1</li>
-                    <li>Selling Price: $14.99</li>
-                </ul>
+            </div>
+
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-lg-12">
+                        <div class="card-body">
+                            <h5 class="card-title">50% Off All-store</h5>
+                            <p class="card-text">Code: BFRIDAY<br>Expires: 11/30/2020</p>
+                            <button class="btn obs-button-primary">Edit</button>
+                            <button class="btn obs-button-primary">Delete</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
