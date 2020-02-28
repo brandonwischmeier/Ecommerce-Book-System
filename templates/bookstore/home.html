@@ -38,7 +38,7 @@
                             <h2>Login</h2>
                             <form>
                                 <div class="form-group">
-                                    <label for="InputEmail1">Email address (Required)</label>
+                                    <label for="InputEmail1">Email address / User ID (Required)</label>
                                     <input type="email" class="form-control" id="InputEmail1" required>
                                 </div>
                                 <div class="form-group">
@@ -48,9 +48,12 @@
                                 <div class="form-group form-check">
                                     <input type="checkbox" class="form-check-input" id="Check1">
                                     <label class="form-check-label" for="remember">Remember me</label>
+                                    <br>
                                 </div>
                                 <button type="submit" class="btn obs-button-primary">Login</button>
                                 <button data-fancybox-close class="btn obs-button-primary">Cancel</button>
+                                <br>
+                                <a href="#">Forget password?</a>
                             </form>
                         </div>
                         <a herf="#"><i class="fas fa-user-plus"></i> Register</a>
@@ -143,7 +146,7 @@
                     <img src="https://dummyimage.com/730x1040/eee/aaa" />
                 </div>
             </div>
-            <h2>Popular Reads</h2>
+            <h2>All Books</h2>
             <div class="row">
                 <div class="col-md-3 obs-book-display">
                     <img src="https://dummyimage.com/730x1040/eee/aaa" />
@@ -158,6 +161,21 @@
                     <img src="https://dummyimage.com/730x1040/eee/aaa" />
                 </div>
             </div>
+            <nav aria-label="...">
+                <ul class="pagination">
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                  </li>
+                  <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                  </li>
+                </ul>
+              </nav>
         </div>
     </main>
 
