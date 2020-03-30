@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static "bookstore/style.css" %}">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet">
+
+    <!-- jQuery and fancybox -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+    <title>Online Bookstore System | OBS</title>
+</head>
+
+<body>
+    <header>
+        <div class="obs-toolbar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- Reserve for links -->
+                    </div>
+                    <div class="col-sm-6 obs-toolbar-r">
+                        <a data-fancybox data-src="#obs-login-modal" data-modal="true" href="javascript:;"><i
+                                class="fas fa-sign-in-alt"></i> Login</a>
+                        <div style="display: none;min-width:600px;" id="obs-login-modal">
+                            <h2>Login</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="InputEmail1">Email address / User ID (Required)</label>
+                                    <input type="email" class="form-control" id="InputEmail1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="InputPassword1">Password (Required)</label>
+                                    <input type="password" class="form-control" id="InputPassword1" required>
+                                </div>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="Check1">
+                                    <label class="form-check-label" for="remember">Remember me</label>
+                                    <br>
+                                </div>
+                                <button type="submit" class="btn obs-button-primary">Login</button>
+                                <button data-fancybox-close class="btn obs-button-primary">Cancel</button>
+                                <br>
+                                <a href="#">Forget password?</a>
+                            </form>
+                        </div>
+                        <a herf="#"><i class="fas fa-user-plus"></i> Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">OBS</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline">
+                        <input class="form-control obs-search" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn my-sm-0 obs-search-button" type="submit">Search</button>
+                        <button class="btn my-sm-0 obs-search-button" style="border-left: 1px solid white">Advanced
+                            Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container obs-container">
+            <h2>Return</h2>
+            <hr>
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-lg-2 obs-book-display" style="padding: 0px !important;">
+                        <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                    </div>
+                    <div class="col-lg-10">
+                        <div class="card-body">
+                            <h5 class="card-title">Order 1</h5>
+                            <p class="card-text">$120.00<br>Step 1: Mail the items back to us: 200 D. W. Brooks Drive,
+                                Athens, GA 30602<br>Step 2: Update us with the tracking code.<br>Step 3: Click on the
+                                return button.</p>
+                            <form class="form-inline row">
+                                <div class="col-sm-9">
+                                    <input class="form-control obs-button" style="width: 100%;" type="text"
+                                        placeholder="Tracking Code" aria-label="Search">
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn my-sm-0 obs-button-primary" style="width: 100%;"
+                                        type="submit">Return</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-lg-2 obs-book-display" style="padding: 0px !important;">
+                        <img src="https://dummyimage.com/730x1040/eee/aaa" />
+                    </div>
+                    <div class="col-lg-10">
+                        <div class="card-body">
+                            <h5 class="card-title">Order item 1</h5>
+                            <p class="card-text">$20.00<br>Step 1: Mail the item back to us: 200 D. W. Brooks Drive,
+                                Athens, GA 30602<br>Step 2: Update us with the tracking code.<br>Step 3: Click on the
+                                return button.</p>
+                            <form class="form-inline row">
+                                <div class="col-sm-9">
+                                    <input class="form-control obs-button" style="width: 100%;" type="text"
+                                        placeholder="Tracking Code" aria-label="Search">
+                                </div>
+                                <div class="col-sm-3">
+                                    <button class="btn my-sm-0 obs-button-primary" style="width: 100%;"
+                                        type="submit">Return</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="obs-footer-up">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>About Us</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Arcu non odio euismod lacinia at quis risus sed.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Category</a></li>
+                            <li><a href="#">Search</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Contact</h4>
+                        <ul>
+                            <li><i class="fas fa-map-marker-alt"></i> <a href="#">200 D. W. Brooks Drive, Athens, GA
+                                    30602</a></li>
+                            <li><i class="fas fa-envelope"></i> <a href="#">obs.uga@gmail.com</a></li>
+                            <li><i class="fas fa-phone-alt"></i> <a href="#">(706) 542-2594</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="obs-footer-down">
+            <div>
+                <img class="obs-accepted-cards" src="image/credit-cards-accepted.png" />
+            </div>
+            Copyright © 2020 Online Bookstore System. All Rights Reserved.
+        </div>
+    </footer>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

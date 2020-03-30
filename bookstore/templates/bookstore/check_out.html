@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static "bookstore/style.css" %}">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet">
+
+    <!-- jQuery and fancybox -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+    <title>Online Bookstore System | OBS</title>
+</head>
+
+<body>
+    <header>
+        <div class="obs-toolbar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!-- Reserve for links -->
+                    </div>
+                    <div class="col-sm-6 obs-toolbar-r">
+                        <a data-fancybox data-src="#obs-login-modal" data-modal="true" href="javascript:;"><i
+                                class="fas fa-sign-in-alt"></i> Login</a>
+                        <div style="display: none;min-width:600px;" id="obs-login-modal">
+                            <h2>Login</h2>
+                            <form>
+                                <div class="form-group">
+                                    <label for="InputEmail1">Email address / User ID (Required)</label>
+                                    <input type="email" class="form-control" id="InputEmail1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="InputPassword1">Password (Required)</label>
+                                    <input type="password" class="form-control" id="InputPassword1" required>
+                                </div>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="Check1">
+                                    <label class="form-check-label" for="remember">Remember me</label>
+                                    <br>
+                                </div>
+                                <button type="submit" class="btn obs-button-primary">Login</button>
+                                <button data-fancybox-close class="btn obs-button-primary">Cancel</button>
+                                <br>
+                                <a href="#">Forget password?</a>
+                            </form>
+                        </div>
+                        <a herf="#"><i class="fas fa-user-plus"></i> Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">OBS</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline">
+                        <input class="form-control obs-search" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn my-sm-0 obs-search-button" type="submit">Search</button>
+                        <button class="btn my-sm-0 obs-search-button" style="border-left: 1px solid white">Advanced
+                            Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container obs-container">
+            <h2>Check Out</h2>
+            <hr>
+            <div class="row">
+                <div class="col-md-4 order-md-2 mb-4">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Your cart</span>
+                        <span class="badge badge-secondary badge-pill">3</span>
+                    </h4>
+                    <div class="obs-checkout-cart">
+                        <div class="obs-checkout-cart-item">
+                            <div style="width: 50%; float: left;">Book 1</div>
+                            <div style="width: 50%; float: left;">Price: $20</div>
+                        </div>
+                        <div class="obs-checkout-cart-item-mod">
+                            <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number" id="bookquantity" name="bookquantity" min="1"
+                                value="1">
+                            <button style="width:40%;" class="btn obs-button-primary">Update</button>
+                            <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
+                        </div>
+                        <div class="obs-checkout-cart-item">
+                            <div style="width: 50%; float: left;">Book 2</div>
+                            <div style="width: 50%; float: left;">Price: $15</div>
+                        </div>
+                        <div class="obs-checkout-cart-item-mod">
+                            <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number" id="bookquantity" name="bookquantity" min="1"
+                                value="1">
+                            <button style="width:40%;" class="btn obs-button-primary">Update</button>
+                            <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
+                        </div>
+                        <div class="obs-checkout-cart-item">
+                            <div style="width: 50%; float: left;">Book 3</div>
+                            <div style="width: 50%; float: left;">Price: $10</div>
+                        </div>
+                        <div class="obs-checkout-cart-item-mod">
+                            <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number" id="bookquantity" name="bookquantity" min="1"
+                                value="1">
+                            <button style="width:40%;" class="btn obs-button-primary">Update</button>
+                            <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
+                        </div>
+                        Total: $45
+                    </div>
+                    <form class="card p-2" style="border-radius: 0;" _lpchecked="1">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Promo code">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-secondary">Redeem</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-8 order-md-1">
+                    <h4 class="mb-3">Billing address</h4>
+                    <form class="needs-validation" novalidate="">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName">First name</label>
+                                <input type="text" class="form-control" id="firstName" placeholder="" value="John"
+                                    required="">
+                                <div class="invalid-feedback">
+                                    Valid first name is required.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName">Last name</label>
+                                <input type="text" class="form-control" id="lastName" placeholder="" value="Doe"
+                                    required="">
+                                <div class="invalid-feedback">
+                                    Valid last name is required.
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                            <input type="email" class="form-control" id="email" placeholder="you@example.com" value="johndoe@example.com">
+                            <div class="invalid-feedback">
+                                Please enter a valid email address for shipping updates.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address">Address</label>
+                            <input type="text" class="form-control" id="address" placeholder="1234 Main St"
+                                value="200 D. W. Brooks Drive" required="">
+                            <div class="invalid-feedback">
+                                Please enter your shipping address.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputCity">City</label>
+                                <input type="text" class="form-control" id="inputCity" placeholder="Athens"
+                                    value="Athens">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputState">State</label>
+                                <input type="text" class="form-control" id="inputState" placeholder="GA" value="GA">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="inputZip">Zip</label>
+                                <input type="text" class="form-control" id="inputZip" placeholder="30602" value="30602">
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="same-address">
+                            <label class="custom-control-label" for="same-address">Shipping address is the same as my
+                                billing address</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="save-info">
+                            <label class="custom-control-label" for="save-info">Save this information for next
+                                time</label>
+                        </div>
+                        <hr class="mb-4">
+
+                        <h4 class="mb-3">Payment</h4>
+
+                        <div class="d-block my-3">
+                            <div class="custom-control custom-radio">
+                                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input"
+                                    checked="" required="">
+                                <label class="custom-control-label" for="credit">Credit card</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input"
+                                    required="">
+                                <label class="custom-control-label" for="debit">Debit card</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-name">Name on card</label>
+                                <input type="text" class="form-control" id="cc-name" placeholder="" value="John Doe"
+                                    required="">
+                                <small class="text-muted">Full name as displayed on card</small>
+                                <div class="invalid-feedback">
+                                    Name on card is required
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-number">Credit card number</label>
+                                <input type="text" class="form-control" id="cc-number" placeholder=""
+                                    value="1111222233334444" required="">
+                                <div class="invalid-feedback">
+                                    Credit card number is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration">Expiration</label>
+                                <input type="text" class="form-control" id="cc-expiration" placeholder="" value="11/11"
+                                    required="">
+                                <div class="invalid-feedback">
+                                    Expiration date required
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration">CVV</label>
+                                <input type="text" class="form-control" id="cc-cvv" placeholder="" value="123"
+                                    required="">
+                                <div class="invalid-feedback">
+                                    Security code required
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <button class="btn obs-button-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="obs-footer-up">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>About Us</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Arcu non odio euismod lacinia at quis risus sed.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Category</a></li>
+                            <li><a href="#">Search</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>Contact</h4>
+                        <ul>
+                            <li><i class="fas fa-map-marker-alt"></i> <a href="#">200 D. W. Brooks Drive, Athens, GA
+                                    30602</a></li>
+                            <li><i class="fas fa-envelope"></i> <a href="#">obs.uga@gmail.com</a></li>
+                            <li><i class="fas fa-phone-alt"></i> <a href="#">(706) 542-2594</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="obs-footer-down">
+            <div>
+                <img class="obs-accepted-cards" src="image/credit-cards-accepted.png" />
+            </div>
+            Copyright © 2020 Online Bookstore System. All Rights Reserved.
+        </div>
+    </footer>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
