@@ -1,8 +1,7 @@
-# CSCI4050
-Online Bookstore Project
+# obs
+book store django project
 
-UI: Hong
+There isn't much functionality yet, but there are urls linked to each template.
 
-Database: Brandon
-
-Backend: Jett & JP
+Clone the repo and use the following command to run the website:
+> python manage.py runserver
