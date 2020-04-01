@@ -9,7 +9,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static "bookstore/style.css" %}">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet">
@@ -56,14 +58,14 @@
                                 <a href="#">Forget password?</a>
                             </form>
                         </div>
-                        <a herf="#"><i class="fas fa-user-plus"></i> Register</a>
+                        <a href="register"><i class="fas fa-user-plus"></i> Register</a>
                     </div>
                 </div>
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" href="#">OBS</a>
+                <a class="navbar-brand" href=".">OBS</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -73,7 +75,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href=".">Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Category</a>
@@ -85,9 +87,9 @@
                     <form class="form-inline">
                         <input class="form-control obs-search" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn my-sm-0 obs-search-button" type="submit">Search</button>
-                        <button class="btn my-sm-0 obs-search-button" style="border-left: 1px solid white">Advanced
-                            Search</button>
                     </form>
+                    <a href="search"><button class="btn my-sm-0 obs-search-button" style="border-left: 1px solid white">Advanced
+                        Search</button></a>
                 </div>
             </div>
         </nav>
@@ -95,87 +97,7 @@
 
     <main>
         <div class="container obs-container">
-            <h2>Featured Books</h2>
-            <div class="row">
-                <div class="col-md-4 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-4 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-4 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-            </div>
-            <h2>New Arrivals</h2>
-            <div class="row">
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-            </div>
-            <h2>All Books</h2>
-            <div class="row">
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-                <div class="col-md-3 obs-book-display">
-                    <img src="https://dummyimage.com/730x1040/eee/aaa" />
-                </div>
-            </div>
-            <nav aria-label="...">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
+            {% block content %}{% endblock %}
         </div>
     </main>
 
@@ -193,7 +115,7 @@
                         <ul>
                             <li><a href="#">Home</a></li>
                             <li><a href="#">Category</a></li>
-                            <li><a href="#">Search</a></li>
+                            <li><a href="search">Search</a></li>
                             <li><a href="#">Contact</a></li>
                         </ul>
                     </div>
@@ -211,7 +133,8 @@
         </div>
         <div class="obs-footer-down">
             <div>
-                <img class="obs-accepted-cards" src="image/credit-cards-accepted.png" />
+                {% load static %}
+                <img class="obs-accepted-cards" src="{% static "bookstore/credit-cards-accepted.png" %}" />
             </div>
             Copyright © 2020 Online Bookstore System. All Rights Reserved.
         </div>
