@@ -1,3 +1,267 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-# Create your models here.
+
+class Promotion(models.Model):
+    promotion_id = models.AutoField(primary_key=True)
+    promo_code = models.CharField(max_length=45)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    discount = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = 'promotion'
+
+
+class UserType(models.Model):
+    user_type_id = models.AutoField(primary_key=True)
+    user_type_name = models.CharField(max_length=8)
+
+    class Meta:
+        managed = False
+        db_table = 'user_type'
+
+
+class AddressType(models.Model):
+    address_type_id = models.AutoField(primary_key=True)
+    address_type_name = models.CharField(max_length=45)
+
+    class Meta:
+        managed = False
+        db_table = 'address_type'
+
+
+class Address(models.Model):
+    address_id = models.AutoField(primary_key=True)
+    street = models.CharField(max_length=45)
+    city = models.CharField(max_length=45)
+    zip_code = models.CharField(max_length=20)
+    address_type = models.ForeignKey('AddressType', models.DO_NOTHING, db_column='address_type')
+
+    class Meta:
+        db_table = 'address'
+
+
+class Book(models.Model):
+    book_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100)
+    isbn = models.CharField(db_column='ISBN', max_length=45)
+    author = models.CharField(max_length=50)
+    category = models.CharField(max_length=45)
+    publisher = models.CharField(max_length=45)
+    publication_year = models.IntegerField()  # This field type is a guess.
+    cover_picture = models.TextField()  # This field type is a guess.
+    rating = models.FloatField()
+    book_status = models.CharField(max_length=45)
+    quantity = models.IntegerField()
+    buying_price = models.FloatField()
+    selling_price = models.FloatField()
+    minimum_threshold = models.IntegerField()
+
+    class Meta:
+        db_table = 'book'
+
+
+class Cart(models.Model):
+    cart_id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField()
+
+    class Meta:
+        db_table = 'cart'
+
+
+class BookCart(models.Model):
+    book = models.OneToOneField(Book, models.DO_NOTHING, primary_key=True)
+    cart = models.ForeignKey('Cart', models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'book_cart'
+        unique_together = (('book', 'cart'),)
+
+
+class Order(models.Model):
+    order_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey('User', models.DO_NOTHING)
+    payment = models.ForeignKey('Payment', models.DO_NOTHING)
+    promotion = models.ForeignKey('Promotion', models.DO_NOTHING, blank=True, null=True)  # Unsure if this is right
+    total_price = models.FloatField()
+    order_date = models.DateField()
+    order_time = models.TimeField()
+
+    class Meta:
+        db_table = 'order'
+
+
+class BookOrder(models.Model):
+    book = models.OneToOneField(Book, models.DO_NOTHING, primary_key=True)
+    order = models.ForeignKey('Order', models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'book_order'
+        unique_together = (('book', 'order'),)
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, models.DO_NOTHING)  # Foreign key relation may be incorrect
+    book = models.ForeignKey(Book, models.DO_NOTHING)
+    quantity = models.IntegerField()
+
+    class Meta:
+        db_table = 'cart_item'
+
+
+class Payment(models.Model):
+    payment_id = models.AutoField(primary_key=True)
+    card_no = models.CharField(max_length=20)
+    type = models.CharField(max_length=45)
+    exp_date = models.DateField()
+    billing_address = models.ForeignKey(Address, models.DO_NOTHING)
+    user = models.ForeignKey('User', models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'payment'
+
+
+class Transaction(models.Model):
+    transaction_id = models.IntegerField(primary_key=True)
+    order = models.ForeignKey(Order, models.DO_NOTHING)
+    book = models.ForeignKey(Book, models.DO_NOTHING)
+    quantity = models.IntegerField()
+
+    class Meta:
+        db_table = 'transaction'
+
+
+class User(models.Model):
+    user_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=45)
+    last_name = models.CharField(max_length=45)
+    user_name = models.CharField(max_length=45)
+    email = models.CharField(max_length=45)
+    password = models.CharField(max_length=45)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True)
+    payment_info = models.ForeignKey(Payment, models.DO_NOTHING, blank=True, null=True)
+    promotion_status = models.CharField(max_length=14)
+    user_status = models.CharField(max_length=10)
+    user_type = models.ForeignKey('UserType', models.DO_NOTHING, db_column='user_type')
+
+    class Meta:
+        db_table = 'user'
+
+
+class AuthGroup(models.Model):
+    name = models.CharField(unique=True, max_length=150)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_group'
+
+
+class AuthGroupPermissions(models.Model):
+    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
+    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_group_permissions'
+        unique_together = (('group', 'permission'),)
+
+
+class AuthPermission(models.Model):
+    name = models.CharField(max_length=255)
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
+    codename = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_permission'
+        unique_together = (('content_type', 'codename'),)
+
+
+class AuthUser(models.Model):
+    password = models.CharField(max_length=128)
+    last_login = models.DateTimeField(blank=True, null=True)
+    is_superuser = models.IntegerField()
+    username = models.CharField(unique=True, max_length=150)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=150)
+    email = models.CharField(max_length=254)
+    is_staff = models.IntegerField()
+    is_active = models.IntegerField()
+    date_joined = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user'
+
+
+class AuthUserGroups(models.Model):
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user_groups'
+        unique_together = (('user', 'group'),)
+
+
+class AuthUserUserPermissions(models.Model):
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'auth_user_user_permissions'
+        unique_together = (('user', 'permission'),)
+
+
+class DjangoAdminLog(models.Model):
+    action_time = models.DateTimeField()
+    object_id = models.TextField(blank=True, null=True)
+    object_repr = models.CharField(max_length=200)
+    action_flag = models.PositiveSmallIntegerField()
+    change_message = models.TextField()
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'django_admin_log'
+
+
+class DjangoContentType(models.Model):
+    app_label = models.CharField(max_length=100)
+    model = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'django_content_type'
+        unique_together = (('app_label', 'model'),)
+
+
+class DjangoMigrations(models.Model):
+    app = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    applied = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_migrations'
+
+
+class DjangoSession(models.Model):
+    session_key = models.CharField(primary_key=True, max_length=40)
+    session_data = models.TextField()
+    expire_date = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_session'
