@@ -1,15 +1,13 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
 
 
 class Promotion(models.Model):
-    # promotion_id = models.AutoField(primary_key=True)
     promo_code = models.CharField(max_length=45)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -19,42 +17,24 @@ class Promotion(models.Model):
         db_table = 'promotion'
 
 
-class UserType(models.Model):
-    # user_type_id = models.AutoField(primary_key=True)
-    user_type_name = models.CharField(max_length=8)
-
-    class Meta:
-        db_table = 'user_type'
-
-
-# class AddressType(models.Model):
-#     # address_type_id = models.AutoField(primary_key=True)
-#     address_type_name = models.CharField(max_length=45)
-#
-#     class Meta:
-#         db_table = 'address_type'
-
-
 class Address(models.Model):
-    # address_id = models.AutoField(primary_key=True)
-    street = models.CharField(max_length=45)
-    city = models.CharField(max_length=45)
-    zip_code = models.CharField(max_length=20)
-    address_type = models.CharField(max_length=20)
+    street = models.CharField(max_length=45, blank=False)
+    city = models.CharField(max_length=45, blank=False)
+    zip_code = models.CharField(max_length=20, blank=False)
+    state = models.CharField(max_length=20, blank=False)
 
     class Meta:
         db_table = 'address'
 
 
 class Book(models.Model):
-    # book_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     isbn = models.CharField(db_column='ISBN', max_length=45)
     author = models.CharField(max_length=50)
     category = models.CharField(max_length=45)
     publisher = models.CharField(max_length=45)
-    publication_year = models.IntegerField()  # This field type is a guess.
-    cover_picture = models.TextField(default="")  # This field type is a guess.
+    publication_year = models.IntegerField()
+    cover_picture = models.TextField(default="")
     rating = models.FloatField()
     book_status = models.CharField(max_length=45)
     quantity = models.IntegerField()
@@ -67,7 +47,6 @@ class Book(models.Model):
 
 
 class Cart(models.Model):
-    # cart_id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
 
     class Meta:
@@ -84,8 +63,7 @@ class BookCart(models.Model):
 
 
 class Order(models.Model):
-    # order_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey('User', models.DO_NOTHING)
+    user = models.ForeignKey('Profile', models.DO_NOTHING)
     payment = models.ForeignKey('Payment', models.DO_NOTHING)
     promotion = models.ForeignKey('Promotion', models.DO_NOTHING, blank=True, null=True)  # Unsure if this is right
     total_price = models.FloatField()
@@ -115,19 +93,16 @@ class CartItem(models.Model):
 
 
 class Payment(models.Model):
-    # payment_id = models.AutoField(primary_key=True)
     card_no = models.CharField(max_length=20)
-    type = models.CharField(max_length=45)
+    card_type = models.CharField(max_length=45)
     exp_date = models.DateField()
-    billing_address = models.ForeignKey(Address, models.DO_NOTHING)
-    user_id = models.ForeignKey('User', models.DO_NOTHING)
+    user_id = models.ForeignKey('UserInfo', models.DO_NOTHING)
 
     class Meta:
         db_table = 'payment'
 
 
 class Transaction(models.Model):
-    # transaction_id = models.IntegerField(primary_key=True)
     order = models.ForeignKey(Order, models.DO_NOTHING)
     book = models.ForeignKey(Book, models.DO_NOTHING)
     quantity = models.IntegerField()
@@ -136,22 +111,40 @@ class Transaction(models.Model):
         db_table = 'transaction'
 
 
-class User(models.Model):
-    # user_id = models.AutoField(primary_key=True)
+class UserInfo(models.Model):
     first_name = models.CharField(max_length=45, blank=False)
-    last_name = models.CharField(max_length=45, blank=False)
+    last_name = models.CharField(max_length=45, blank=True)
     user_name = models.CharField(max_length=45, blank=False)
-    email = models.CharField(max_length=45, blank=False)
+    email = models.EmailField(max_length=45, blank=False)
     password = models.CharField(max_length=45, blank=False)
-    phone_number = models.CharField(max_length=20, blank=False)
-    address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    shipping_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True, related_name='shipping')
+    billing_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True, related_name='billing')
     payment_info = models.ForeignKey(Payment, models.DO_NOTHING, blank=True, null=True)
-    promotion_status = models.CharField(max_length=14)
-    user_status = models.CharField(max_length=10)
-    user_type = models.ForeignKey('UserType', models.DO_NOTHING, db_column='user_type')
+    promotion_status = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'user'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=45, blank=False)
+    last_name = models.CharField(max_length=45, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    shipping_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True,
+                                         related_name='profile_shipping')
+    billing_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True,
+                                        related_name='profile_billing')
+    payment_info = models.ForeignKey(Payment, models.DO_NOTHING, blank=True, null=True)
+    promotion_status = models.BooleanField(default=False)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 
 class AuthGroup(models.Model):
