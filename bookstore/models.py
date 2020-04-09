@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Promotion(models.Model):
-    #promotion_id = models.AutoField(primary_key=True)
+    # promotion_id = models.AutoField(primary_key=True)
     promo_code = models.CharField(max_length=45)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -20,34 +20,34 @@ class Promotion(models.Model):
 
 
 class UserType(models.Model):
-    #user_type_id = models.AutoField(primary_key=True)
+    # user_type_id = models.AutoField(primary_key=True)
     user_type_name = models.CharField(max_length=8)
 
     class Meta:
         db_table = 'user_type'
 
 
-class AddressType(models.Model):
-    #address_type_id = models.AutoField(primary_key=True)
-    address_type_name = models.CharField(max_length=45)
-
-    class Meta:
-        db_table = 'address_type'
+# class AddressType(models.Model):
+#     # address_type_id = models.AutoField(primary_key=True)
+#     address_type_name = models.CharField(max_length=45)
+#
+#     class Meta:
+#         db_table = 'address_type'
 
 
 class Address(models.Model):
-    #address_id = models.AutoField(primary_key=True)
+    # address_id = models.AutoField(primary_key=True)
     street = models.CharField(max_length=45)
     city = models.CharField(max_length=45)
     zip_code = models.CharField(max_length=20)
-    address_type = models.ForeignKey('AddressType', models.DO_NOTHING, db_column='address_type')
+    address_type = models.CharField(max_length=20)
 
     class Meta:
         db_table = 'address'
 
 
 class Book(models.Model):
-    #book_id = models.AutoField(primary_key=True)
+    # book_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
     isbn = models.CharField(db_column='ISBN', max_length=45)
     author = models.CharField(max_length=50)
@@ -67,7 +67,7 @@ class Book(models.Model):
 
 
 class Cart(models.Model):
-    #cart_id = models.AutoField(primary_key=True)
+    # cart_id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
 
     class Meta:
@@ -84,7 +84,7 @@ class BookCart(models.Model):
 
 
 class Order(models.Model):
-    #order_id = models.AutoField(primary_key=True)
+    # order_id = models.AutoField(primary_key=True)
     user = models.ForeignKey('User', models.DO_NOTHING)
     payment = models.ForeignKey('Payment', models.DO_NOTHING)
     promotion = models.ForeignKey('Promotion', models.DO_NOTHING, blank=True, null=True)  # Unsure if this is right
@@ -115,7 +115,7 @@ class CartItem(models.Model):
 
 
 class Payment(models.Model):
-    #payment_id = models.AutoField(primary_key=True)
+    # payment_id = models.AutoField(primary_key=True)
     card_no = models.CharField(max_length=20)
     type = models.CharField(max_length=45)
     exp_date = models.DateField()
@@ -127,7 +127,7 @@ class Payment(models.Model):
 
 
 class Transaction(models.Model):
-    #transaction_id = models.IntegerField(primary_key=True)
+    # transaction_id = models.IntegerField(primary_key=True)
     order = models.ForeignKey(Order, models.DO_NOTHING)
     book = models.ForeignKey(Book, models.DO_NOTHING)
     quantity = models.IntegerField()
@@ -137,13 +137,13 @@ class Transaction(models.Model):
 
 
 class User(models.Model):
-    #user_id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=45)
-    last_name = models.CharField(max_length=45)
-    user_name = models.CharField(max_length=45)
-    email = models.CharField(max_length=45)
-    password = models.CharField(max_length=45)
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    # user_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=45, blank=False)
+    last_name = models.CharField(max_length=45, blank=False)
+    user_name = models.CharField(max_length=45, blank=False)
+    email = models.CharField(max_length=45, blank=False)
+    password = models.CharField(max_length=45, blank=False)
+    phone_number = models.CharField(max_length=20, blank=False)
     address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True)
     payment_info = models.ForeignKey(Payment, models.DO_NOTHING, blank=True, null=True)
     promotion_status = models.CharField(max_length=14)
