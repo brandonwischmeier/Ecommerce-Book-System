@@ -132,3 +132,27 @@ footer a, footer a:active, footer a:hover {
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(0,0,0,.125);
 }
+
+.page-item:first-child .page-link {
+    margin-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.page-item:last-child .page-link {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.page-item.active .page-link {
+    background-color: #222831;
+    border-color: #222831;
+}
+
+.page-link {
+    color: #222831;
+}
+
+.page-link:hover {
+    color: #222831;
+}
