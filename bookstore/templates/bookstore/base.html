@@ -30,43 +30,57 @@
         <div class="obs-toolbar">
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-5">
                         <!-- Reserve for links -->
+                        {% if user.is_authenticated %}
+                            {% if user.first_name %}
+                                <a>Hello, {{user.first_name}}</a>
+                            {% else %}
+                                <a>Hello, {{user.username}}</a>
+                            {% endif %}
+                        {% endif %}
                     </div>
-                    <div class="col-sm-6 obs-toolbar-r">
-                        <a data-fancybox data-src="#obs-login-modal" data-modal="true" href="javascript:;"><i
-                                class="fas fa-sign-in-alt"></i> Login</a>
-                        <div style="display: none;min-width:600px;" id="obs-login-modal">
-                            <h2>Login</h2>
-                            <form method="post" action ="{% url 'login' %}">
-                            	{% csrf_token %}
-                                <div class="form-group" >
-                                    <label for="InputEmail1">Email address / User ID (Required)</label>
-                                    <input type="text" class="form-control" name="username" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="InputPassword1">Password (Required)</label>
-                                    <input type="password" class="form-control" name="password" required>
-                                </div>
-                                <div class="form-group form-check">
-                                    <input type="checkbox" class="form-check-input" id="Check1">
-                                    <label class="form-check-label" for="remember">Remember me</label>
+                    <div class="col-7 obs-toolbar-r">
+                        {% if user.is_anonymous %}
+                            <a data-fancybox data-src="#obs-login-modal" data-modal="true" href="javascript:;"><i
+                                    class="fas fa-sign-in-alt"></i> Login</a>
+                            <div style="display: none;min-width:600px;" id="obs-login-modal">
+                                <h2>Login</h2>
+                                <form method="post" action ="{% url 'login' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group" >
+                                        <label for="InputEmail1">Email address / User ID (Required)</label>
+                                        <input type="text" class="form-control" name="username" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="InputPassword1">Password (Required)</label>
+                                        <input type="password" class="form-control" name="password" required>
+                                    </div>
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" class="form-check-input" id="Check1">
+                                        <label class="form-check-label" for="remember">Remember me</label>
+                                        <br>
+                                    </div>
+                                    <button type="submit" class="btn obs-button-primary">Login</button>
+                                    <button data-fancybox-close class="btn obs-button-primary">Cancel</button>
                                     <br>
-                                </div>
-                                <button type="submit" class="btn obs-button-primary">Login</button>
-                                <button data-fancybox-close class="btn obs-button-primary">Cancel</button>
-                                <br>
-                                <a href="#">Forget password?</a>
-                            </form>
-                        </div>
-                        <a href="register"><i class="fas fa-user-plus"></i> Register</a>
+                                    <a href="#">Forget password?</a>
+                                </form>
+                            </div>
+                            <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Register</a>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'shopping_cart' %}"><i class="fas fa-shopping-cart"></i> Shopping Cart</a>
+                            <a href="#"><i class="fas fa-user"></i> Profile</a>
+                            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> logout</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" href=".">OBS</a>
+                <a class="navbar-brand" href="{% url 'bookstore_home' %}">OBS</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -76,13 +90,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href=".">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Category</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link" href="{% url 'bookstore_home' %}"><i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
                         </li>
                     </ul>
                     <form class="form-inline">
@@ -114,7 +122,7 @@
                     <div class="col-md-4">
                         <h4>Quick Links</h4>
                         <ul>
-                            <li><a href="#">Home</a></li>
+                            <li><a href="{% url 'bookstore_home' %}">Home</a></li>
                             <li><a href="#">Category</a></li>
                             <li><a href="search">Search</a></li>
                             <li><a href="#">Contact</a></li>
@@ -125,7 +133,7 @@
                         <ul>
                             <li><i class="fas fa-map-marker-alt"></i> <a href="#">200 D. W. Brooks Drive, Athens, GA
                                     30602</a></li>
-                            <li><i class="fas fa-envelope"></i> <a href="#">obs.uga@gmail.com</a></li>
+                            <li><i class="fas fa-envelope"></i> <a href="#">ugabookproject@gmail.com</a></li>
                             <li><i class="fas fa-phone-alt"></i> <a href="#">(706) 542-2594</a></li>
                         </ul>
                     </div>

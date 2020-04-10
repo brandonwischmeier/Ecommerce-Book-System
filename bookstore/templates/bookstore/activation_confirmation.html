@@ -1,0 +1,21 @@
+{% extends "bookstore/base.html"%}
+{% block content %}
+    <h2>Registration Confirmation</h2>
+    <hr>
+    <div style="font-size: 100px;line-height: 0;text-align: center;width: 100%;"><i class="far fa-check-circle"></i></div>
+    <p style="width: 100%; text-align: center; font-size: 20pt;">Activation Success! Redirecting to home after <span id="countdown">10</span> seconds</p>
+
+    <script type="text/javascript">
+        var seconds = 10;
+        function countdown() {
+            if (seconds < 0) {
+                window.location = "{% url 'bookstore_home' %}";
+            } else {
+                document.getElementById("countdown").innerHTML = seconds;
+                window.setTimeout("countdown()", 1000);
+            }
+            seconds = seconds - 1;
+        }
+        countdown();
+    </script>
+{% endblock content %}
