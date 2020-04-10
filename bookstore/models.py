@@ -96,7 +96,6 @@ class Payment(models.Model):
     card_no = models.CharField(max_length=20)
     card_type = models.CharField(max_length=45)
     exp_date = models.DateField()
-    user_id = models.ForeignKey('UserInfo', models.DO_NOTHING)
 
     class Meta:
         db_table = 'payment'
@@ -109,22 +108,6 @@ class Transaction(models.Model):
 
     class Meta:
         db_table = 'transaction'
-
-
-class UserInfo(models.Model):
-    first_name = models.CharField(max_length=45, blank=False)
-    last_name = models.CharField(max_length=45, blank=True)
-    user_name = models.CharField(max_length=45, blank=False)
-    email = models.EmailField(max_length=45, blank=False)
-    password = models.CharField(max_length=45, blank=False)
-    phone_number = models.CharField(max_length=20, blank=True)
-    shipping_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True, related_name='shipping')
-    billing_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True, related_name='billing')
-    payment_info = models.ForeignKey(Payment, models.DO_NOTHING, blank=True, null=True)
-    promotion_status = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = 'user'
 
 
 class Profile(models.Model):
