@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
@@ -7,7 +8,9 @@ from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_encode
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponse
 
 from .models import Address
 from .forms import RegisterForm
@@ -15,6 +18,31 @@ from .tokens import confirmation_token
 # Create your views here.
 def home(request):
     return render(request, 'bookstore/home.html')
+
+def loginU(request):
+    if request.method =='POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print(username)
+        print(password)
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request,user)
+                return HttpResponseRedirect(reverse('bookstore_home'))
+            else:
+                username = request.POST.get('email')
+                if user.is_active:
+                    login(request,user)
+                    return HttpResponseRedirect(reverse('bookstore/edit_profile.html'))
+                return HttpResponse("Your account is inactive.")
+        else:
+            print("login attempted and failed.")
+            return HttpResponse("invalid login details given")
+
+    else:
+        print('yut')
+        return render(request, 'bookstore/home.html',{})
 
 def register(request):
 	if request.method == 'POST':
@@ -101,6 +129,15 @@ def activate(request, uidb64, token):
 
 def confirmation(request):
     return render(request, 'bookstore/registration_confirmation.html')
+
+@login_required
+def special(request):
+	return HttpResponse("You're already logged into an account.")
+
+@login_required
+def logoutU(request):
+	logout(request)
+	return HttpResponseRedirect(reverse('bookstore_home'))
 
 def book_detail(request):
     return render(request, 'bookstore/book_detail.html')
