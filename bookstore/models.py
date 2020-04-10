@@ -112,8 +112,6 @@ class Transaction(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=45, blank=False)
-    last_name = models.CharField(max_length=45, blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     shipping_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True,
                                          related_name='profile_shipping')
