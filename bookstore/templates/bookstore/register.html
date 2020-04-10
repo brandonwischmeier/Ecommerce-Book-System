@@ -1,27 +1,120 @@
 {% extends "bookstore/base.html"%}
 {% block content %}
-
-
-    <form method="post">
+    <form method="POST">
+        {% csrf_token %}
         <h2>Register</h2>
-            {% csrf_token %}
+        <hr>
+        <h3>Account Info (Required)</h3>
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationDefault01">Username</label>
+                {{ form.username }} 
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault01">First name</label>
+                {{ form.first_name }} 
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault02">Last name</label>
+                {{ form.last_name }}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label for="phone-number">Phone number</label>
+                {{ form.phone_number }}
+                <div class="invalid-feedback">
+                    Format: 123-456-7890
+                </div>
+            </div>
+            <div class="col-md-12 mb-3">
+                <label for="InputEmail1">Email</label>
+                {{ form.email }}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label for="inputPassword">Password</label>
+                {{ form.password1 }}
+            </div>
+            <div class="col-md-12 mb-3">
+                <label for="inputPassword">Password Again</label>
+                {{ form.password2 }}
+            </div>
+        </div>
+        <h3>Shipping Address (Optional)</h3>
+        <div class="form-group">
+            <label for="inputAddress">Address</label>
+            {{ form.ship_street }}
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCity">City</label>
+                {{ form.ship_city }}
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputState">State</label>
+                {{ form.ship_state }}
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputZip">Zip</label>
+                {{ form.ship_zip_code }}
+            </div>
+        </div>
+        <h3>Billing Address (Optional)</h3>
+        <div class="mb-3">
+            <label for="address">Address</label>
+            {{ form.bill_street }}
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCity">City</label>
+                {{ form.bill_city }}
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputState">State</label>
+                {{ form.bill_state }}
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputZip">Zip</label>
+                {{ form.bill_zip_code }}
+            </div>
+        </div>
+        <hr class="mb-4">
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="same-address">
+            {{ form.ship_is_billing }}
+            <label class="custom-control-label" for="same-address">Shipping address is the same as my billing
+                address</label>
+        </div>
+        <hr class="mb-4">
 
-            {% for field in form %}
-                <p>
-                  {{ field.label_tag }}<br>
-                  {{ field }}
-                  {% if field.help_text %}
-                    <small style="color: grey">{{ field.help_text }}</small>
-                  {% endif %}
+        <h4 class="mb-3">Payment</h4>
 
-                  {% for error in field.errors %}
-                    <p style="color: red">{{ error }}</p>
-                  {% endfor %}
-                </p>
-              {% endfor %}
-
+        <div class="d-block my-3">
+            <div class="custom-control custom-radio">
+                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="">
+                <label class="custom-control-label" for="credit">Credit card</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input">
+                <label class="custom-control-label" for="debit">Debit card</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input">
+                <label class="custom-control-label" for="paypal">Paypal</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="cc-number">Credit card number</label>
+                {{ form.card_no }}
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="cc-expiration">Expiration</label>
+                {{ form.exp_date }}
+            </div>
+        </div>
+        <div class="custom-control custom-checkbox" style="padding-bottom: 15px;">
+            {{ form.promotion_sign_up }}
+            <label class="custom-control-label" for="promote">Sign up for promotions and lattest news.</label>
+        </div>
         <button type="submit" class="btn obs-button-primary">Submit</button>
     </form>
-
-    
 {% endblock content %}

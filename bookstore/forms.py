@@ -5,33 +5,33 @@ from django.contrib.auth.forms import UserCreationForm
 class RegisterForm(UserCreationForm):
 
 	# Get user Info
-    first_name = forms.CharField(label='First Name')
-    last_name = forms.CharField(label='Last Name', required=False)
-    username = forms.CharField(label='Username', min_length=5, max_length=20)
-    phone_number = forms.CharField(label='Phone Number', required=False)
-    email = forms.EmailField(label='Email')
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'First name', 'required' : '',}))
+    last_name = forms.CharField(label='Last Name', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Last name', 'required' : '',}))
+    username = forms.CharField(label='Username', min_length=5, max_length=20, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Username', 'required' : '',}))
+    phone_number = forms.CharField(label='Phone Number', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'name' : 'phone', 'placeholder': '123-456-7890', 'pattern':'[0-9]{3}-[0-9]{3}-[0-9]{4}'}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class' : 'form-control', 'placeholder' : 'example@uga.edu', 'aria-describedby':'emailHelp', 'required' : ''}))
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class' : 'form-control', 'placeholder' : 'Password', 'required' : ''}))
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(attrs={'class' : 'form-control', 'placeholder' : 'Confirm Password', 'required' : ''}))
 
     # Get Shippinng Address Info
-    ship_street = forms.CharField(label='Street', max_length=45, required=False)
-    ship_city = forms.CharField(label='City', max_length=45, required=False)
-    ship_state = forms.CharField(label='State', max_length=2, required=False)
-    ship_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False)
+    ship_street = forms.CharField(label='Street', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
+    ship_city = forms.CharField(label='City', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
+    ship_state = forms.CharField(label='State', max_length=2, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
+    ship_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602'}))
 
     # Get Billing Address Info
-    bill_street = forms.CharField(label='Street', max_length=45, required=False)
-    bill_city = forms.CharField(label='City', max_length=45, required=False)
-    bill_state = forms.CharField(label='State', max_length=2, required=False)
-    bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False)
+    bill_street = forms.CharField(label='Street', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
+    bill_city = forms.CharField(label='City', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
+    bill_state = forms.CharField(label='State', max_length=2, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
+    bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602'}))
 
-    ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False)
-    promotion_sign_up = forms.BooleanField(label='Sign Up for Promotions', required=False)
+    ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'same-address'}))
+    promotion_sign_up = forms.BooleanField(label='Sign Up for Promotions', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'promote', 'checked':''}))
 
     # Get Payment Info
-    card_no = forms.CharField(label='Card Number', max_length=20, required=False)
+    card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
     card_type = forms.CharField(label='Card Type', max_length=45, required=False)
-    exp_date = forms.DateField(label='Expiration Date', required=False)
+    exp_date = forms.DateField(label='Expiration Date', required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20'}))
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
