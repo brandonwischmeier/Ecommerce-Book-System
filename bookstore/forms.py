@@ -26,6 +26,7 @@ class RegisterForm(UserCreationForm):
     bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False)
 
     ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False)
+    promotion_sign_up = forms.BooleanField(label='Sign Up for Promotions', required=False)
 
     # Get Payment Info
     card_no = forms.CharField(label='Card Number', max_length=20, required=False)
