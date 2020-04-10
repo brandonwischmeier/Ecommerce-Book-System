@@ -1,7 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+
+
 from .models import Address
 from .forms import RegisterForm
+from .tokens import confirmation_token
 # Create your views here.
 def home(request):
     return render(request, 'bookstore/home.html')
@@ -39,7 +49,7 @@ def register(request):
 
 	                bill_addr = Address(street=bill_street, city=bill_city, state=bill_state, zip_code=bill_zip_code)
 	                bill_addr.save()
-	                user.profile.shipping_address = bill_addr
+	                user.profile.billing_address = bill_addr
 
 	        #Get user info
 	        user.profile.first_name = form.cleaned_data.get('first_name')
@@ -48,17 +58,46 @@ def register(request):
 	        user.profile.last_name = form.cleaned_data.get('last_name')
 	        user.profile.username = form.cleaned_data.get('username')
 	        user.profile.phone_number = form.cleaned_data.get('phone_number')
-
-
 	        user.profile.email = form.cleaned_data.get('email')
+
+	        # Set user to inactive and send email confirmation
+	        user.is_active = False
 	        user.save()
-	        username = form.cleaned_data.get('username')
-	        password = form.cleaned_data.get('password2')
-	        user = authenticate(username=username, password=password)
-	        return redirect('.')
+	        print('saved user '+str(user.username))
+	        current_site = get_current_site(request)
+	        subject = 'Please Confirm Your Email'
+
+	        message = render_to_string('bookstore/registration_confirmation_to_console.html', {
+	            'user': user,
+	            'domain': current_site.domain,
+	            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+	            # method will generate a hash value with user related data
+	            'token': confirmation_token.make_token(user),
+	        })
+	        user.email_user(subject, message)
+	        print('redirecting to registration_confirmation ')
+	        return redirect('registration_confirmation')
+	    else:
+	    	print('bad form')
 	else:
 	    form = RegisterForm()
 	return render(request, 'bookstore/register.html', {'form': form})
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    # checking if the user exists, if the token is valid.
+    if user is not None and confirmation_token.check_token(user, token):
+        # if valid set active true 
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('bookstore_home')
+    else:
+        return render(request, 'activation_invalid.html')
 
 def confirmation(request):
     return render(request, 'bookstore/registration_confirmation.html')
