@@ -1,178 +1,119 @@
 {% extends "bookstore/base.html"%}
 {% block content %}
-    <form>
+    <form method="POST" action ="{% url 'edit_profile' %}">
+        {% csrf_token %}
         <h2>Edit Profile</h2>
         <hr>
         <h3>Personal Info</h3>
         <div class="form-row">
             <div class="col-md-4 mb-3">
                 <label for="validationDefault01">First name</label>
-                <input type="text" class="form-control" id="validationDefault01" placeholder="First name" value="John"
-                    required>
+                {{ form.first_name }}
+                {% for error in form.first_name.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
             <div class="col-md-4 mb-3">
                 <label for="validationDefault02">Last name</label>
-                <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" value="Doe"
-                    required>
+                {{ form.last_name }}
+                {% for error in form.last_name.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
             <div class="col-md-4 mb-3">
                 <label for="validationDefaultUsername">Username</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrepend2">@</span>
-                    </div>
-                    <input type="text" class="form-control" id="validationDefaultUsername" placeholder="Username"
-                        aria-describedby="inputGroupPrepend2" value="jDoe" required>
-                </div>
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
             <div class="custom-control custom-checkbox" style="padding-bottom: 15px;">
-                <input type="checkbox" class="custom-control-input" id="promote" checked>
+                {{ form.promotion_sign_up }}
                 <label class="custom-control-label" for="promote">Sign up for promotions and lattest news.</label>
             </div>
         </div>
-        <h3>Address Info</h3>
+        <h3>Shipping Address (Optional)</h3>
         <div class="form-group">
             <label for="inputAddress">Address</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-        </div>
-        <div class="form-group">
-            <label for="inputAddress2">Address 2</label>
-            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+            {{ form.ship_street }}
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputCity">City</label>
-                <input type="text" class="form-control" id="inputCity" placeholder="Athens">
+                {{ form.ship_city }}
             </div>
             <div class="form-group col-md-4">
                 <label for="inputState">State</label>
-                <input type="text" class="form-control" id="inputState" placeholder="GA">
+                {{ form.ship_state }}
             </div>
             <div class="form-group col-md-2">
                 <label for="inputZip">Zip</label>
-                <input type="text" class="form-control" id="inputZip" placeholder="30602">
+                {{ form.ship_zip_code }}
             </div>
         </div>
-        <h3>Payment Info</h3>
+        <h3>Billing Address (Optional)</h3>
         <div class="mb-3">
             <label for="address">Address</label>
-            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
-            <div class="invalid-feedback">
-                Please enter your shipping address.
-            </div>
+            {{ form.bill_street }}
         </div>
-
-        <div class="mb-3">
-            <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-            <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-        </div>
-
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputCity">City</label>
-                <input type="text" class="form-control" id="inputCity" placeholder="Athens">
+                {{ form.bill_city }}
             </div>
             <div class="form-group col-md-4">
                 <label for="inputState">State</label>
-                <input type="text" class="form-control" id="inputState" placeholder="GA">
+                {{ form.bill_state }}
             </div>
             <div class="form-group col-md-2">
                 <label for="inputZip">Zip</label>
-                <input type="text" class="form-control" id="inputZip" placeholder="30602">
+                {{ form.bill_zip_code }}
             </div>
         </div>
-        <hr class="mb-4">
-        <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="same-address">
-            <label class="custom-control-label" for="same-address">Shipping address is the same as my billing
-                address</label>
-        </div>
-        <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="save-info">
-            <label class="custom-control-label" for="save-info">Save this information for next time</label>
-        </div>
-        <hr class="mb-4">
 
         <h4 class="mb-3">Payment</h4>
 
         <div class="d-block my-3">
             <div class="custom-control custom-radio">
-                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="" required="">
+                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="">
                 <label class="custom-control-label" for="credit">Credit card</label>
             </div>
             <div class="custom-control custom-radio">
-                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input">
                 <label class="custom-control-label" for="debit">Debit card</label>
             </div>
             <div class="custom-control custom-radio">
-                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input">
                 <label class="custom-control-label" for="paypal">Paypal</label>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label for="cc-name">Name on card</label>
-                <input type="text" class="form-control" id="cc-name" placeholder="" required="">
-                <small class="text-muted">Full name as displayed on card</small>
-                <div class="invalid-feedback">
-                    Name on card is required
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
                 <label for="cc-number">Credit card number</label>
-                <input type="text" class="form-control" id="cc-number" placeholder="" required="">
-                <div class="invalid-feedback">
-                    Credit card number is required
-                </div>
+                {{ form.card_no }}
             </div>
-        </div>
-        <div class="row">
             <div class="col-md-3 mb-3">
                 <label for="cc-expiration">Expiration</label>
-                <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
-                <div class="invalid-feedback">
-                    Expiration date required
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="cc-expiration">CVV</label>
-                <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
-                <div class="invalid-feedback">
-                    Security code required
-                </div>
+                {{ form.exp_date }}
+                {% for error in form.exp_date.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
         </div>
         <h3>Account Security</h3>
         <div class="form-group row">
             <label for="staticEmail" class="col-sm-3 col-form-label">Current Email</label>
             <div class="col-sm-9">
-                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com">
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{user.email}}">
             </div>
         </div>
         <div class="form-group row">
             <label for="InputEmail1" class="col-sm-3 col-form-label">New Email</label>
             <div class="col-sm-9">
-                <input type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp"
-                    placeholder="Enter email">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="inputPassword" class="col-sm-3 col-form-label">New Password</label>
-            <div class="col-sm-9">
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="inputPassword" class="col-sm-3 col-form-label">New Password Again</label>
-            <div class="col-sm-9">
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-            </div>
-        </div>
-        <hr>
-        <div class="form-group row">
-            <label for="inputPassword" class="col-sm-3 col-form-label">Current Password</label>
-            <div class="col-sm-9">
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                {{ form.email }}
+                {% for error in form.email.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
         </div>
         <button type="submit" class="btn obs-button-primary">Save</button>

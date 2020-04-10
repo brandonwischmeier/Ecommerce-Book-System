@@ -12,6 +12,6 @@ urlpatterns = [
     path('checkout', views.checkout, name='check_out'),
     path('history', views.history, name='order_history'),
     path('login', views.loginU, name='login'),
-    path('logout', views.logoutU, name='logout')
-
+    path('logout', views.logoutU, name='logout'),
+    path('profile/edit', views.edit_profile, name='edit_profile')
 ]

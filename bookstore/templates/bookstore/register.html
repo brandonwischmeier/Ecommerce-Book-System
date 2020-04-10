@@ -1,6 +1,6 @@
 {% extends "bookstore/base.html"%}
 {% block content %}
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <h2>Register</h2>
         <hr>
