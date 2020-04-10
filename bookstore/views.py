@@ -123,7 +123,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return redirect('bookstore_home')
+        return render(request, 'activation_confirmation.html')
     else:
         return render(request, 'activation_invalid.html')
 

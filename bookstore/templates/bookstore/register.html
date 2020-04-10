@@ -8,19 +8,31 @@
         <div class="form-row">
             <div class="col-md-12 mb-3">
                 <label for="validationDefault01">Username</label>
-                {{ form.username }} 
+                {{ form.username }}
+                {% for error in form.username.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
             <div class="col-md-6 mb-3">
                 <label for="validationDefault01">First name</label>
-                {{ form.first_name }} 
+                {{ form.first_name }}
+                {% for error in form.first_name.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
             <div class="col-md-6 mb-3">
                 <label for="validationDefault02">Last name</label>
                 {{ form.last_name }}
+                {% for error in form.last_name.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
             <div class="col-md-12 mb-3">
                 <label for="phone-number">Phone number</label>
                 {{ form.phone_number }}
+                {% for error in form.phone_number.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
                 <div class="invalid-feedback">
                     Format: 123-456-7890
                 </div>
@@ -28,14 +40,23 @@
             <div class="col-md-12 mb-3">
                 <label for="InputEmail1">Email</label>
                 {{ form.email }}
+                {% for error in form.username.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
             <div class="col-md-12 mb-3">
                 <label for="inputPassword">Password</label>
                 {{ form.password1 }}
+                {% for error in form.password1.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
             <div class="col-md-12 mb-3">
                 <label for="inputPassword">Password Again</label>
                 {{ form.password2 }}
+                {% for error in form.password2.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
         </div>
         <h3>Shipping Address (Optional)</h3>
@@ -109,6 +130,9 @@
             <div class="col-md-3 mb-3">
                 <label for="cc-expiration">Expiration</label>
                 {{ form.exp_date }}
+                {% for error in form.exp_date.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
             </div>
         </div>
         <div class="custom-control custom-checkbox" style="padding-bottom: 15px;">
