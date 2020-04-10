@@ -17,6 +17,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'ugabookproject@gmail.com'
+EMAIL_HOST_PASSWORD = 'H0ng1234'
+EMAIL_PORT = 587
+
+DEFAULT_FROM_EMAIL = 'ugabookproject@gmail.com'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
