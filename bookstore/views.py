@@ -48,16 +48,6 @@ def loginU(request):
         # return render(request, 'bookstore/home.html', {})
 
 
-def reset_password(request):
-    if request.method == 'POST':
-        reset_password_email = request.POST.get('email')
-        print(reset_password_email)
-        return redirect('bookstore_home')
-
-    else:
-        print('Not POST for reset_password')
-
-
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)

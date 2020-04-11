@@ -69,9 +69,11 @@
                                 <div style="display: none;min-width:600px;" id="obs-forget-modal">
                                     <form method="post" action ="{% url 'reset_password' %}">
                                         {% csrf_token %}
+                                        <p>Forgotten your password? Enter your email address below, and we’ll email instructions for setting a new one.</p>
                                         <div class="form-group" >
-                                            <label for="InputEmail1">Email address (Required)</label>
-                                            <input type="email" class="form-control" name="email" required>
+                                            <label for="id_email">Email address (Required)</label>
+                                            <input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken">
+                                            <input type="email" class="form-control" name="email" autocomplete="email" maxlength="254" required="" id="id_email">
                                         </div>
                                         <button type="submit" class="btn obs-button-primary">Sent</button>
                                         <button class="btn obs-button-primary" onclick="window.location.href = '{% url 'bookstore_home' %}';">Cancel</button>
