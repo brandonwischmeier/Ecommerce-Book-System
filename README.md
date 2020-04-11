@@ -9,7 +9,8 @@ Clone the repo
 ```
 $ git clone https://github.com/H0NGWANG/CSCI4050.git
 ```
-Use the following command to run the website
+Make sure you have the latest [Python](https://www.python.org/downloads/) installed.  
+Go to the root directory of this project and use the following command to run the website.
 ```
 $ python manage.py runserver
 ```
