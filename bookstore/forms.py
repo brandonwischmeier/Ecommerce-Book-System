@@ -68,7 +68,7 @@ class RegisterForm(UserCreationForm):
 
 class EditUserForm(UserChangeForm):
 
-    first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'First name', 'required' : '',}))
+    first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'First name', 'required' : '', 'value': ''}))
     last_name = forms.CharField(label='Last Name', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Last name', 'required' : '',}))
     
     ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'same-address'}))
