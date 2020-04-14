@@ -44,6 +44,7 @@ class Book(models.Model):
 
     class Meta:
         db_table = 'book'
+        ordering = ('title',)
 
 
 class Cart(models.Model):

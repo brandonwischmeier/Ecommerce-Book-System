@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -12,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http.response import HttpResponse
 
-from .models import Address, Payment
+from .models import Address, Payment, Book
 from .forms import EditUserForm, RegisterForm
 from .tokens import confirmation_token
 # Create your views here.
@@ -225,7 +226,46 @@ def book_detail(request):
 
 
 def search(request):
-    return render(request, 'bookstore/search_view.html')
+    if request.method == 'POST':
+        search_text = request.POST.get('search_text')
+        search_text_top = request.POST.get('search_text_top')
+        radio_group = request.POST.get('search-radio-group')
+
+        if search_text_top:
+            results = Book.objects.filter(category__icontains=search_text_top).distinct()
+            print('got subject results seaching with: '+search_text_top)
+
+        if search_text and radio_group == 's':
+            results = Book.objects.filter(category__icontains=search_text).distinct()
+            print('got subject results seaching with: '+search_text)
+
+        if search_text and radio_group == 't': #Book Title
+            results = Book.objects.filter(title__icontains=search_text).distinct()
+            print('got title results seaching with: '+search_text)
+
+        elif search_text and radio_group == 'a': #Author
+            results = Book.objects.filter(author__icontains=search_text).distinct()
+            print('got author results seaching with: '+search_text)
+
+        elif search_text and radio_group == 'i': #ISBN
+            results = Book.objects.filter(isbn__icontains=search_text).distinct()
+            print('got isbn results seaching with: '+search_text)
+        else:
+            results = Book.objects.all()
+        
+    else:
+        results = Book.objects.all()
+
+    paginator = Paginator(results, 5)
+    page = request.GET.get('page')
+    try:
+        books = paginator.page(page)
+    except PageNotAnInteger:
+        books = paginator.page(1)
+    except EmptyPage:
+        books = paginator.page(paginator.num_pages)
+
+    return render(request, 'bookstore/search_view.html', {'books': books})
 
 
 def cart(request):
