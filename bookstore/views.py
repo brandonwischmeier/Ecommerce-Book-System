@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate, password_validation
 from django.contrib.auth.models import User
@@ -15,15 +14,22 @@ from django.http.response import HttpResponse
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 
+
 from .models import Address, Payment, Book
 from .forms import EditUserForm, RegisterForm
 from .tokens import confirmation_token
 import base64
+from lib2to3.fixes.fix_input import context
 # Create your views here.
 
 
 def home(request):
-    return render(request, 'bookstore/home.html')
+    context = {
+        'books': Book.objects.all()
+    }
+    
+    return render(request, 'bookstore/home.html', context)
+
 
 
 def loginU(request):
@@ -96,7 +102,7 @@ def register(request):
             if form.cleaned_data.get('card_no') and form.cleaned_data.get('exp_date'):
 
                 card_no = form.cleaned_data.get('card_no')
-                card_type = form.cleaned_data.get('card_type')
+                #card_type = form.cleaned_data.get('card_type')
                 exp_date = form.cleaned_data.get('exp_date')
                 payment = Payment(
                     card_no=base64.b64encode(bytes(card_no, 'ascii')), card_type=card_type, exp_date=base64.b64encode(bytes(exp_date, 'ascii')))
@@ -107,7 +113,6 @@ def register(request):
             user.profile.first_name = form.cleaned_data.get('first_name')
             user.profile.last_name = form.cleaned_data.get('last_name')
             user.profile.phone_number = form.cleaned_data.get('phone_number')
-            user.profile.promotion_status = form.cleaned_data.get('promotion_sign_up')
 
             # Set user to inactive and send email confirmation
             user.is_active = False
@@ -168,7 +173,6 @@ def logoutU(request):
 
 @login_required
 def edit_profile(request):
-
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance=request.user)
 
@@ -208,7 +212,7 @@ def edit_profile(request):
 
                 if form.cleaned_data.get('card_no') and form.cleaned_data.get('exp_date'):
                     card_no = form.cleaned_data.get('card_no')
-                    card_type = form.cleaned_data.get('card_type')
+                    #card_type = form.cleaned_data.get('card_type')
                     exp_date = form.cleaned_data.get('exp_date')
                     payment = Payment(
                         card_no=base64.b64encode(bytes(card_no, 'ascii')), card_type=card_type, exp_date=base64.b64encode(bytes(exp_date, 'ascii')))
@@ -217,8 +221,6 @@ def edit_profile(request):
 
             user.profile.first_name = form.cleaned_data.get('first_name')
             user.profile.last_name = form.cleaned_data.get('last_name')
-            user.profile.promotion_status = form.cleaned_data.get('promotion_sign_up')
-            print(user.profile.promotion_status)
             user.save()
 
             subject = '[OBS] Your profile has been changed.'
@@ -290,51 +292,16 @@ def edit_password(request):
     return render(request, 'bookstore/change_password.html')
 
 
-def book_detail(request):
-    return render(request, 'bookstore/book_detail.html')
+def book_detail(request, pk=None):
+    if pk:
+        book = Book.objects.get(pk=pk)
+    else:
+        book = request.book
+    return render(request, 'bookstore/book_detail.html',context={'book': book})
 
 
 def search(request):
-    if request.method == 'POST':
-        search_text = request.POST.get('search_text')
-        search_text_top = request.POST.get('search_text_top')
-        radio_group = request.POST.get('search-radio-group')
-
-        if search_text_top:
-            results = Book.objects.filter(category__icontains=search_text_top).distinct()
-            print('got subject results seaching with: '+search_text_top)
-
-        if search_text and radio_group == 's':
-            results = Book.objects.filter(category__icontains=search_text).distinct()
-            print('got subject results seaching with: '+search_text)
-
-        if search_text and radio_group == 't': #Book Title
-            results = Book.objects.filter(title__icontains=search_text).distinct()
-            print('got title results seaching with: '+search_text)
-
-        elif search_text and radio_group == 'a': #Author
-            results = Book.objects.filter(author__icontains=search_text).distinct()
-            print('got author results seaching with: '+search_text)
-
-        elif search_text and radio_group == 'i': #ISBN
-            results = Book.objects.filter(isbn__icontains=search_text).distinct()
-            print('got isbn results seaching with: '+search_text)
-        else:
-            results = Book.objects.all()
-        
-    else:
-        results = Book.objects.all()
-
-    paginator = Paginator(results, 5)
-    page = request.GET.get('page')
-    try:
-        books = paginator.page(page)
-    except PageNotAnInteger:
-        books = paginator.page(1)
-    except EmptyPage:
-        books = paginator.page(paginator.num_pages)
-
-    return render(request, 'bookstore/search_view.html', {'books': books})
+    return render(request, 'bookstore/search_view.html')
 
 
 def cart(request):
