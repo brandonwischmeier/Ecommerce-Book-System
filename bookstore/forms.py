@@ -25,13 +25,13 @@ class RegisterForm(UserCreationForm):
     ship_street = forms.CharField(label='Street', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
     ship_city = forms.CharField(label='City', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
     ship_state = forms.CharField(label='State', max_length=2, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
-    ship_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602'}))
+    ship_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602', 'onKeyPress':'if(this.value.length==5) return false;'}))
 
     # Get Billing Address Info
     bill_street = forms.CharField(label='Street', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
     bill_city = forms.CharField(label='City', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
     bill_state = forms.CharField(label='State', max_length=2, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
-    bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602'}))
+    bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602', 'onKeyPress':'if(this.value.length==5) return false;'}))
 
     ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'same-address'}))
     promotion_sign_up = forms.BooleanField(label='Sign Up for Promotions', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'promote', 'checked':''}))
@@ -88,12 +88,12 @@ class EditUserForm(UserChangeForm):
     ship_street = forms.CharField(label='Street', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
     ship_city = forms.CharField(label='City', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
     ship_state = forms.CharField(label='State', max_length=2, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
-    ship_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602'}))
+    ship_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602', 'onKeyPress':'if(this.value.length==5) return false;'}))
 
     bill_street = forms.CharField(label='Street', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
     bill_city = forms.CharField(label='City', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
     bill_state = forms.CharField(label='State', max_length=2, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
-    bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602'}))
+    bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602', 'onKeyPress':'if(this.value.length==5) return false;'}))
 
     card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
     card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=False)
