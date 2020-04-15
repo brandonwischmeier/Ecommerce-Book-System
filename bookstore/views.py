@@ -15,7 +15,7 @@ from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-
+import random
 from .models import Address, Payment, Book
 from .forms import EditUserForm, RegisterForm
 from .tokens import confirmation_token
@@ -25,8 +25,11 @@ from lib2to3.fixes.fix_input import context
 
 
 def home(request):
+    books = list(Book.objects.all())
+    random.shuffle(books)
+    books = books[:8]
     context = {
-        'books': Book.objects.all()
+        'books': books
     }
     
     return render(request, 'bookstore/home.html', context)
