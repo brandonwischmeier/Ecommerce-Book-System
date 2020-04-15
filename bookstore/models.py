@@ -1,10 +1,10 @@
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
 
 
 class Promotion(models.Model):
@@ -35,7 +35,7 @@ class Book(models.Model):
     publisher = models.CharField(max_length=45)
     publication_year = models.IntegerField()
     cover_picture = models.TextField(default="")
-    rating = models.IntegerField()
+    rating = models.FloatField()
     book_status = models.CharField(max_length=45)
     quantity = models.IntegerField()
     buying_price = models.FloatField()
@@ -44,28 +44,22 @@ class Book(models.Model):
 
     class Meta:
         db_table = 'book'
+        ordering = ('title',)
 
 
 class Cart(models.Model):
-    user_id = models.IntegerField()
+    user = models.ForeignKey('Profile', on_delete=models.CASCADE,
+                             default="")  # Had to add default bc 'user' is a non-nullable field and needs a
+    # default; the database needs something to populate existing rows
 
     class Meta:
         db_table = 'cart'
 
 
-class BookCart(models.Model):
-    book = models.OneToOneField(Book, models.DO_NOTHING, primary_key=True)
-    cart = models.ForeignKey('Cart', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'book_cart'
-        unique_together = (('book', 'cart'),)
-
-
 class Order(models.Model):
-    user = models.ForeignKey('Profile', models.DO_NOTHING)
-    payment = models.ForeignKey('Payment', models.DO_NOTHING)
-    promotion = models.ForeignKey('Promotion', models.DO_NOTHING, blank=True, null=True)  # Unsure if this is right
+    user = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    payment = models.ForeignKey('Payment', on_delete=models.CASCADE)
+    promotion = models.ForeignKey('Promotion', on_delete=models.CASCADE, blank=True, null=True)
     total_price = models.FloatField()
     order_date = models.DateField()
     order_time = models.TimeField()
@@ -74,18 +68,19 @@ class Order(models.Model):
         db_table = 'order'
 
 
-class BookOrder(models.Model):
-    book = models.OneToOneField(Book, models.DO_NOTHING, primary_key=True)
-    order = models.ForeignKey('Order', models.DO_NOTHING)
+class OrderItem(models.Model):
+    book = models.OneToOneField(Book, on_delete=models.CASCADE, primary_key=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
 
     class Meta:
-        db_table = 'book_order'
+        db_table = 'order_item'
         unique_together = (('book', 'order'),)
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, models.DO_NOTHING)  # Foreign key relation may be incorrect
-    book = models.ForeignKey(Book, models.DO_NOTHING)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
     class Meta:
@@ -93,17 +88,23 @@ class CartItem(models.Model):
 
 
 class Payment(models.Model):
+    CARD_TYPES = (
+        (1, 'Visa'),
+        (2, 'MasterCard'),
+        (3, 'American Express'),
+    )
+
     card_no = models.CharField(max_length=20)
-    card_type = models.CharField(max_length=45)
-    exp_date = models.DateField()
+    card_type = models.CharField(choices=CARD_TYPES, max_length=45)
+    exp_date = models.CharField(max_length=20)
 
     class Meta:
         db_table = 'payment'
 
 
 class Transaction(models.Model):
-    order = models.ForeignKey(Order, models.DO_NOTHING)
-    book = models.ForeignKey(Book, models.DO_NOTHING)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
     class Meta:
@@ -113,11 +114,11 @@ class Transaction(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20, blank=True)
-    shipping_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True,
+    shipping_address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True,
                                          related_name='profile_shipping')
-    billing_address = models.ForeignKey(Address, models.DO_NOTHING, blank=True, null=True,
+    billing_address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True,
                                         related_name='profile_billing')
-    payment_info = models.ForeignKey(Payment, models.DO_NOTHING, blank=True, null=True)
+    payment_info = models.ForeignKey(Payment, on_delete=models.CASCADE, blank=True, null=True)
     promotion_status = models.BooleanField(default=False)
 
 
