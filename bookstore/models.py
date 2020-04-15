@@ -48,7 +48,9 @@ class Book(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey('Profile', on_delete=models.CASCADE,
+                             default="")  # Had to add default bc 'user' is a non-nullable field and needs a
+    # default; the database needs something to populate existing rows
 
     class Meta:
         db_table = 'cart'
