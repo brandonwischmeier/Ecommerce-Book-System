@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -12,15 +11,22 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http.response import HttpResponse
+from django.shortcuts import get_object_or_404
 
 from .models import Address, Payment, Book
 from .forms import EditUserForm, RegisterForm
 from .tokens import confirmation_token
+from lib2to3.fixes.fix_input import context
 # Create your views here.
 
 
 def home(request):
-    return render(request, 'bookstore/home.html')
+    context = {
+        'books': Book.objects.all()
+    }
+    
+    return render(request, 'bookstore/home.html', context)
+
 
 
 def loginU(request):
@@ -89,10 +95,10 @@ def register(request):
             if form.cleaned_data.get('card_no') and form.cleaned_data.get('exp_date'):
 
                 card_no = form.cleaned_data.get('card_no')
-                card_type = form.cleaned_data.get('card_type')
+                #card_type = form.cleaned_data.get('card_type')
                 exp_date = form.cleaned_data.get('exp_date')
                 payment = Payment(
-                    card_no=card_no, card_type=card_type, exp_date=exp_date)
+                    card_no=card_no, card_type='visa', exp_date=exp_date)
                 payment.save()
                 user.profile.payment_info = payment
 
@@ -100,7 +106,6 @@ def register(request):
             user.profile.first_name = form.cleaned_data.get('first_name')
             user.profile.last_name = form.cleaned_data.get('last_name')
             user.profile.phone_number = form.cleaned_data.get('phone_number')
-            user.profile.promotion_status = form.cleaned_data.get('promotion_sign_up')
 
             # Set user to inactive and send email confirmation
             user.is_active = False
@@ -161,7 +166,6 @@ def logoutU(request):
 
 @login_required
 def edit_profile(request):
-
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance=request.user)
 
@@ -201,17 +205,15 @@ def edit_profile(request):
 
                 if form.cleaned_data.get('card_no') and form.cleaned_data.get('exp_date'):
                     card_no = form.cleaned_data.get('card_no')
-                    card_type = form.cleaned_data.get('card_type')
+                    #card_type = form.cleaned_data.get('card_type')
                     exp_date = form.cleaned_data.get('exp_date')
                     payment = Payment(
-                        card_no=card_no, card_type=card_type, exp_date=exp_date)
+                        card_no=card_no, card_type='visa', exp_date=exp_date)
                     payment.save()
                     user.profile.payment_info = payment
 
             user.profile.first_name = form.cleaned_data.get('first_name')
             user.profile.last_name = form.cleaned_data.get('last_name')
-            user.profile.promotion_status = form.cleaned_data.get('promotion_sign_up')
-            print(user.profile.promotion_status)
             user.save()
 
             print('saved user '+str(user.username))
@@ -222,97 +224,21 @@ def edit_profile(request):
             print('bad form')
     else:
         form = EditUserForm(instance=request.user)
-
-    form.fields['promotion_sign_up'].initial = request.user.profile.promotion_status
-
-    if request.user.profile.shipping_address:
-        form.fields['ship_street'].initial = request.user.profile.shipping_address.street
-        form.fields['ship_city'].initial = request.user.profile.shipping_address.city
-        form.fields['ship_state'].initial = request.user.profile.shipping_address.state
-        form.fields['ship_zip_code'].initial = request.user.profile.shipping_address.zip_code
-
-    if request.user.profile.billing_address:
-        form.fields['bill_street'].initial = request.user.profile.billing_address.street
-        form.fields['bill_city'].initial = request.user.profile.billing_address.city
-        form.fields['bill_state'].initial = request.user.profile.billing_address.state
-        form.fields['bill_zip_code'].initial = request.user.profile.billing_address.zip_code
-
-    if request.user.profile.payment_info:
-        form.fields['card_no'].initial = request.user.profile.payment_info.card_no
-        form.fields['exp_date'].initial = request.user.profile.payment_info.exp_date
-        form.fields['card_type'].initial = request.user.profile.payment_info.card_type
-
     return render(request, 'bookstore/edit_profile.html', {'form': form})
 
-@login_required
-def edit_password(request):
 
-    if request.method == 'POST':
-        currPass = request.POST.get('currPass')
-        newPass = request.POST.get('newPass')
-        newPass2 = request.POST.get('newPass2')
+def book_detail(request, pk=None):
+    if pk:
+        book = Book.objects.get(pk=pk)
+    else:
+        book = request.book
+    args = {'book': book}
+    return render(request, 'bookstore/book_detail.html',context={'book': book})
 
-        if currPass and newPass and newPass2:
-            print('curr pass: '+currPass)
-            print('new pass: '+newPass)
-            print('new pass 2: '+newPass2)
-            if newPass == newPass2:
-                user = authenticate(username=request.user.username, password=currPass)
-                if user:
-                    user.set_password(newPass)
-                    user.save()
-                    login(request, user)
-                    
-                    print('set new password to: '+newPass)
-                    return redirect(reverse('edit_profile'))
-
-    return render(request, 'bookstore/change_password.html')
-
-def book_detail(request):
-    return render(request, 'bookstore/book_detail.html')
 
 
 def search(request):
-    if request.method == 'POST':
-        search_text = request.POST.get('search_text')
-        search_text_top = request.POST.get('search_text_top')
-        radio_group = request.POST.get('search-radio-group')
-
-        if search_text_top:
-            results = Book.objects.filter(category__icontains=search_text_top).distinct()
-            print('got subject results seaching with: '+search_text_top)
-
-        if search_text and radio_group == 's':
-            results = Book.objects.filter(category__icontains=search_text).distinct()
-            print('got subject results seaching with: '+search_text)
-
-        if search_text and radio_group == 't': #Book Title
-            results = Book.objects.filter(title__icontains=search_text).distinct()
-            print('got title results seaching with: '+search_text)
-
-        elif search_text and radio_group == 'a': #Author
-            results = Book.objects.filter(author__icontains=search_text).distinct()
-            print('got author results seaching with: '+search_text)
-
-        elif search_text and radio_group == 'i': #ISBN
-            results = Book.objects.filter(isbn__icontains=search_text).distinct()
-            print('got isbn results seaching with: '+search_text)
-        else:
-            results = Book.objects.all()
-        
-    else:
-        results = Book.objects.all()
-
-    paginator = Paginator(results, 5)
-    page = request.GET.get('page')
-    try:
-        books = paginator.page(page)
-    except PageNotAnInteger:
-        books = paginator.page(1)
-    except EmptyPage:
-        books = paginator.page(paginator.num_pages)
-
-    return render(request, 'bookstore/search_view.html', {'books': books})
+    return render(request, 'bookstore/search_view.html')
 
 
 def cart(request):
