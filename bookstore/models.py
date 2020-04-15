@@ -28,6 +28,11 @@ class Address(models.Model):
 
 
 class Book(models.Model):
+    BOOK_STATUS = {
+        ('Available', 'Available'),
+        ('Unavailable', 'Unavailable'),
+    }
+
     title = models.CharField(max_length=100)
     isbn = models.CharField(db_column='ISBN', max_length=45)
     author = models.CharField(max_length=50)
@@ -35,8 +40,8 @@ class Book(models.Model):
     publisher = models.CharField(max_length=45)
     publication_year = models.IntegerField()
     cover_picture = models.TextField(default="")
-    rating = models.FloatField()
-    book_status = models.CharField(max_length=45)
+    rating = models.IntegerField()
+    book_status = models.CharField(choices=BOOK_STATUS, max_length=45)
     quantity = models.IntegerField()
     buying_price = models.FloatField()
     selling_price = models.FloatField()
@@ -50,6 +55,7 @@ class Book(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey('Profile', on_delete=models.CASCADE,
                              default="")  # Had to add default bc 'user' is a non-nullable field and needs a
+
     # default; the database needs something to populate existing rows
 
     class Meta:
