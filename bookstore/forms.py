@@ -7,6 +7,11 @@ from .models import Profile, Address, Payment
 
 class RegisterForm(UserCreationForm):
 
+    CARD_TYPES = (
+        (1, 'Visa'),
+        (2, 'MasterCard'),
+        (3, 'American Express'),
+    )
 	# Get user Info
     first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'First name', 'required' : '',}))
     last_name = forms.CharField(label='Last Name', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Last name', 'required' : '',}))
@@ -33,8 +38,8 @@ class RegisterForm(UserCreationForm):
 
     # Get Payment Info
     card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
-    card_type = forms.CharField(label='Card Type', max_length=45, required=False)
-    exp_date = forms.DateField(label='Expiration Date', required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
+    card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=False)
+    exp_date = forms.CharField(label='Expiration Date', required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
@@ -68,6 +73,12 @@ class RegisterForm(UserCreationForm):
 
 class EditUserForm(UserChangeForm):
 
+    CARD_TYPES = (
+        (1, 'Visa'),
+        (2, 'MasterCard'),
+        (3, 'American Express'),
+    )
+
     first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'First name', 'required' : '', 'value': ''}))
     last_name = forms.CharField(label='Last Name', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Last name', 'required' : '',}))
     
@@ -85,8 +96,8 @@ class EditUserForm(UserChangeForm):
     bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602'}))
 
     card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
-    card_type = forms.CharField(label='Card Type', max_length=45, required=False)
-    exp_date = forms.DateField(label='Expiration Date', required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
+    card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=False)
+    exp_date = forms.CharField(label='Expiration Date', max_length=20, required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()

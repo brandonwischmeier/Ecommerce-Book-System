@@ -40,7 +40,7 @@
             <div class="col-md-12 mb-3">
                 <label for="InputEmail1">Email</label>
                 {{ form.email }}
-                {% for error in form.username.errors %}
+                {% for error in form.email.errors %}
                     <p style="color: red">{{ error }}</p>
                 {% endfor %}
             </div>
@@ -139,6 +139,7 @@
             {{ form.promotion_sign_up }}
             <label class="custom-control-label" for="promote">Sign up for promotions and lattest news.</label>
         </div>
+        {{ form.card_type }}
         <button type="submit" class="btn obs-button-primary">Submit</button>
     </form>
 {% endblock content %}

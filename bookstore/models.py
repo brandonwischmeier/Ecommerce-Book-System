@@ -94,9 +94,16 @@ class CartItem(models.Model):
 
 
 class Payment(models.Model):
+
+    CARD_TYPES = (
+            (1, 'Visa'),
+            (2, 'MasterCard'),
+            (3, 'American Express'),
+        )
+
     card_no = models.CharField(max_length=20)
     card_type = models.CharField(max_length=45)
-    exp_date = models.DateField()
+    exp_date = models.CharField(choices=CARD_TYPES, max_length=20)
 
     class Meta:
         db_table = 'payment'

@@ -89,10 +89,10 @@ def register(request):
             if form.cleaned_data.get('card_no') and form.cleaned_data.get('exp_date'):
 
                 card_no = form.cleaned_data.get('card_no')
-                #card_type = form.cleaned_data.get('card_type')
+                card_type = form.cleaned_data.get('card_type')
                 exp_date = form.cleaned_data.get('exp_date')
                 payment = Payment(
-                    card_no=card_no, card_type='visa', exp_date=exp_date)
+                    card_no=card_no, card_type=card_type, exp_date=exp_date)
                 payment.save()
                 user.profile.payment_info = payment
 
@@ -160,6 +160,7 @@ def logoutU(request):
 
 @login_required
 def edit_profile(request):
+
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance=request.user)
 
@@ -199,10 +200,10 @@ def edit_profile(request):
 
                 if form.cleaned_data.get('card_no') and form.cleaned_data.get('exp_date'):
                     card_no = form.cleaned_data.get('card_no')
-                    #card_type = form.cleaned_data.get('card_type')
+                    card_type = form.cleaned_data.get('card_type')
                     exp_date = form.cleaned_data.get('exp_date')
                     payment = Payment(
-                        card_no=card_no, card_type='visa', exp_date=exp_date)
+                        card_no=card_no, card_type=card_type, exp_date=exp_date)
                     payment.save()
                     user.profile.payment_info = payment
 
@@ -218,8 +219,48 @@ def edit_profile(request):
             print('bad form')
     else:
         form = EditUserForm(instance=request.user)
+
+    if request.user.profile.shipping_address:
+        form.fields['ship_street'].initial = request.user.profile.shipping_address.street
+        form.fields['ship_city'].initial = request.user.profile.shipping_address.city
+        form.fields['ship_state'].initial = request.user.profile.shipping_address.state
+        form.fields['ship_zip_code'].initial = request.user.profile.shipping_address.zip_code
+
+    if request.user.profile.billing_address:
+        form.fields['bill_street'].initial = request.user.profile.billing_address.street
+        form.fields['bill_city'].initial = request.user.profile.billing_address.city
+        form.fields['bill_state'].initial = request.user.profile.billing_address.state
+        form.fields['bill_zip_code'].initial = request.user.profile.billing_address.zip_code
+
+    if request.user.profile.payment_info:
+        form.fields['card_no'].initial = request.user.profile.payment_info.card_no
+        form.fields['exp_date'].initial = request.user.profile.payment_info.exp_date
+
     return render(request, 'bookstore/edit_profile.html', {'form': form})
 
+@login_required
+def edit_password(request):
+
+    if request.method == 'POST':
+        currPass = request.POST.get('currPass')
+        newPass = request.POST.get('newPass')
+        newPass2 = request.POST.get('newPass2')
+
+        if currPass and newPass and newPass2:
+            print('curr pass: '+currPass)
+            print('new pass: '+newPass)
+            print('new pass 2: '+newPass2)
+            if newPass == newPass2:
+                user = authenticate(username=request.user.username, password=currPass)
+                if user:
+                    user.set_password(newPass)
+                    user.save()
+                    login(request, user)
+                    
+                    print('set new password to: '+newPass)
+                    return redirect(reverse('edit_profile'))
+
+    return render(request, 'bookstore/change_password.html')
 
 def book_detail(request):
     return render(request, 'bookstore/book_detail.html')
