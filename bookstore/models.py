@@ -95,9 +95,9 @@ class CartItem(models.Model):
 
 class Payment(models.Model):
     CARD_TYPES = (
-        (1, 'Visa'),
-        (2, 'MasterCard'),
-        (3, 'American Express'),
+        ('Visa', 'Visa'),
+        ('Mastercard', 'MasterCard'),
+        ('American Express', 'American Express'),
     )
 
     card_no = models.CharField(max_length=20)
