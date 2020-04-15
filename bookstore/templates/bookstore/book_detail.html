@@ -4,23 +4,21 @@
     <hr>
     <div class="row">
         <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
+            <img src="{{book.cover_picture}}" >
         </div>
         <div class="col-md-9">
-            <h2>Elements of Programming Interviews in Python: The Insiders' Guide</h2>
-            <span class="fa fa-star obs-checked"></span>
-            <span class="fa fa-star obs-checked"></span>
-            <span class="fa fa-star obs-checked"></span>
-            <span class="fa fa-star obs-checked"></span>
-            <span class="fa fa-star"></span>
+            <h2>{{book.title}}</h2>
+            
+            {% with ''|center:book.rating as range %}
+			{% for _ in range %}
+    			<span class="fa fa-star obs-checked"></span>
+			{% endfor %}
+			{% endwith %}
+			
             <p style="font-size: 25px;">$35.96</p>
             <strong>Description:</strong>
             <br>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                labore et dolore magna aliqua. Viverra accumsan in nisl nisi scelerisque eu ultrices vitae
-                auctor. Quam viverra orci sagittis eu. Sit amet dictum sit amet justo. Donec pretium vulputate
-                sapien nec sagittis aliquam. Rhoncus est pellentesque elit ullamcorper dignissim cras tincidunt
-                lobortis feugiat.</p>
+            
             <form class="form-inline">
                 <div class="form-group mb-2">
                     <input type="number" class="form-control" id="bookquantity" name="bookquantity" min="1" value="1">
@@ -29,16 +27,14 @@
             </form>
         </div>
         <ul>
-            <li>ISBN-10: 1537713949</li>
-            <li>ISBN-13: 978-1537713946</li>
-            <li>Category: Programming</li>
-            <li>Author: Adnan Aziz </li>
-            <li>Edition: 2nd</li>
-            <li>Publisher: CreateSpace Independent Publishing Platform</li>
-            <li>Publication Year: September 15, 2016</li>
-            <li>Quantity-in-Stock: 5,000</li>
-            <li>Minimum Threshold: 1</li>
-            <li>Selling Price: $14.99</li>
+            <li>ISBN: {{book.isbn}}</li>
+            <li>Category: {{book.category}}</li>
+            <li>Author: {{book.author}}</li>
+            <li>Publisher: {{book.publisher}}</li>
+            <li>Publication Year: {{book.publication_year}}</li>
+            <li>Quantity-in-Stock: {{book.quantity}}</li>
+            <li>Minimum Threshold: {{book.minimum_threshold}}</li>
+            <li>Selling Price: {{book.selling_price}}</li>
         </ul>
     </div>
 {% endblock content %}
