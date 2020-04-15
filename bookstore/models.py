@@ -95,7 +95,7 @@ class CartItem(models.Model):
 class Payment(models.Model):
     card_no = models.CharField(max_length=20)
     card_type = models.CharField(max_length=45)
-    exp_date = models.DateField()
+    exp_date = models.CharField(max_length=5)
 
     class Meta:
         db_table = 'payment'

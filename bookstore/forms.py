@@ -34,7 +34,7 @@ class RegisterForm(UserCreationForm):
     # Get Payment Info
     card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
     card_type = forms.CharField(label='Card Type', max_length=45, required=False)
-    exp_date = forms.DateField(label='Expiration Date', required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
+    exp_date = forms.CharField(label='Expiration Date', max_length=5, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '02/20'}))
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
@@ -86,7 +86,7 @@ class EditUserForm(UserChangeForm):
 
     card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
     card_type = forms.CharField(label='Card Type', max_length=45, required=False)
-    exp_date = forms.DateField(label='Expiration Date', required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
+    exp_date = forms.CharField(label='Expiration Date', max_length=5, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '02/20'}))
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
