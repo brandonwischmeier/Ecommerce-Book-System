@@ -100,6 +100,7 @@ def register(request):
             user.profile.first_name = form.cleaned_data.get('first_name')
             user.profile.last_name = form.cleaned_data.get('last_name')
             user.profile.phone_number = form.cleaned_data.get('phone_number')
+            user.profile.promotion_status = form.cleaned_data.get('promotion_sign_up')
 
             # Set user to inactive and send email confirmation
             user.is_active = False
@@ -209,6 +210,8 @@ def edit_profile(request):
 
             user.profile.first_name = form.cleaned_data.get('first_name')
             user.profile.last_name = form.cleaned_data.get('last_name')
+            user.profile.promotion_status = form.cleaned_data.get('promotion_sign_up')
+            print(user.profile.promotion_status)
             user.save()
 
             print('saved user '+str(user.username))
@@ -219,6 +222,8 @@ def edit_profile(request):
             print('bad form')
     else:
         form = EditUserForm(instance=request.user)
+
+    form.fields['promotion_sign_up'].initial = request.user.profile.promotion_status
 
     if request.user.profile.shipping_address:
         form.fields['ship_street'].initial = request.user.profile.shipping_address.street
@@ -235,6 +240,7 @@ def edit_profile(request):
     if request.user.profile.payment_info:
         form.fields['card_no'].initial = request.user.profile.payment_info.card_no
         form.fields['exp_date'].initial = request.user.profile.payment_info.exp_date
+        form.fields['card_type'].initial = request.user.profile.payment_info.card_type
 
     return render(request, 'bookstore/edit_profile.html', {'form': form})
 

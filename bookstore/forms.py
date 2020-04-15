@@ -67,8 +67,9 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',
+            'ship_is_billing', 'promotion_sign_up',
         	'ship_street', 'ship_city', 'ship_state', 'ship_zip_code',
-        	'bill_street', 'bill_city', 'bill_state', 'bill_zip_code', 'ship_is_billing',
+        	'bill_street', 'bill_city', 'bill_state', 'bill_zip_code',
         	'card_no', 'card_type', 'exp_date')
 
 class EditUserForm(UserChangeForm):
@@ -83,7 +84,7 @@ class EditUserForm(UserChangeForm):
     last_name = forms.CharField(label='Last Name', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Last name', 'required' : '',}))
     
     ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'same-address'}))
-    promotion_sign_up = forms.BooleanField(label='Sign Up for Promotions', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'promote', 'checked':''}))
+    promotion_sign_up = forms.BooleanField(label='Sign Up for Promotions', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'promote'}))
     
     ship_street = forms.CharField(label='Street', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
     ship_city = forms.CharField(label='City', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
@@ -97,7 +98,7 @@ class EditUserForm(UserChangeForm):
 
     card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
     card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=False, widget=forms.Select(attrs={'class' : 'form-control'}))
-    exp_date = forms.CharField(label='Expiration Date', max_length=20, required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
+    exp_date = forms.CharField(label='Expiration Date', max_length=20, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
@@ -108,7 +109,7 @@ class EditUserForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name',
+        fields = ('first_name', 'last_name', 'ship_is_billing', 'promotion_sign_up',
             'ship_street', 'ship_city', 'ship_state', 'ship_zip_code',
             'bill_street', 'bill_city', 'bill_state', 'bill_zip_code', 'ship_is_billing',
             'card_no', 'card_type', 'exp_date')

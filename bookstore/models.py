@@ -102,8 +102,8 @@ class Payment(models.Model):
         )
 
     card_no = models.CharField(max_length=20)
-    card_type = models.CharField(max_length=45)
-    exp_date = models.CharField(choices=CARD_TYPES, max_length=20)
+    card_type = models.CharField(choices=CARD_TYPES, max_length=45)
+    exp_date = models.CharField(max_length=20)
 
     class Meta:
         db_table = 'payment'
