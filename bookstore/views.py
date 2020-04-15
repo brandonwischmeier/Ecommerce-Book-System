@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, password_validation
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_text
@@ -12,10 +12,13 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http.response import HttpResponse
+from django.core.exceptions import ValidationError
+from django.contrib import messages
 
 from .models import Address, Payment, Book
 from .forms import EditUserForm, RegisterForm
 from .tokens import confirmation_token
+import base64
 # Create your views here.
 
 
@@ -33,6 +36,10 @@ def loginU(request):
         if user:
             if user.is_active:
                 login(request, user)
+                if request.POST.get('remember_me', None):
+                    request.session.set_expiry(60 * 60 * 24 * 14) # 14 days
+                else:
+                    request.session.set_expiry(0) # 0 days
                 return redirect('bookstore_home')
             else:
                 username = request.POST.get('email')
@@ -92,7 +99,7 @@ def register(request):
                 card_type = form.cleaned_data.get('card_type')
                 exp_date = form.cleaned_data.get('exp_date')
                 payment = Payment(
-                    card_no=card_no, card_type=card_type, exp_date=exp_date)
+                    card_no=base64.b64encode(bytes(card_no, 'ascii')), card_type=card_type, exp_date=base64.b64encode(bytes(exp_date, 'ascii')))
                 payment.save()
                 user.profile.payment_info = payment
 
@@ -204,7 +211,7 @@ def edit_profile(request):
                     card_type = form.cleaned_data.get('card_type')
                     exp_date = form.cleaned_data.get('exp_date')
                     payment = Payment(
-                        card_no=card_no, card_type=card_type, exp_date=exp_date)
+                        card_no=base64.b64encode(bytes(card_no, 'ascii')), card_type=card_type, exp_date=base64.b64encode(bytes(exp_date, 'ascii')))
                     payment.save()
                     user.profile.payment_info = payment
 
@@ -213,6 +220,11 @@ def edit_profile(request):
             user.profile.promotion_status = form.cleaned_data.get('promotion_sign_up')
             print(user.profile.promotion_status)
             user.save()
+
+            subject = '[OBS] Your profile has been changed.'
+            message = 'Hi' + user.profile.first_name + ',<br><br>your profile has been changed.'
+
+            user.email_user(subject, message)
 
             print('saved user '+str(user.username))
 
@@ -238,8 +250,12 @@ def edit_profile(request):
         form.fields['bill_zip_code'].initial = request.user.profile.billing_address.zip_code
 
     if request.user.profile.payment_info:
-        form.fields['card_no'].initial = request.user.profile.payment_info.card_no
-        form.fields['exp_date'].initial = request.user.profile.payment_info.exp_date
+        # form.fields['card_no'].initial = request.user.profile.payment_info.card_no 
+        # form.fields['exp_date'].initial = request.user.profile.payment_info.exp_date
+        # form.fields['card_type'].initial = request.user.profile.payment_info.card_type
+
+        form.fields['card_no'].initial = str(base64.b64decode(request.user.profile.payment_info.card_no[2:-1]))[2:-1]
+        form.fields['exp_date'].initial = str(base64.b64decode(request.user.profile.payment_info.exp_date[2:-1]))[2:-1]
         form.fields['card_type'].initial = request.user.profile.payment_info.card_type
 
     return render(request, 'bookstore/edit_profile.html', {'form': form})
@@ -257,16 +273,22 @@ def edit_password(request):
             print('new pass: '+newPass)
             print('new pass 2: '+newPass2)
             if newPass == newPass2:
-                user = authenticate(username=request.user.username, password=currPass)
-                if user:
-                    user.set_password(newPass)
-                    user.save()
-                    login(request, user)
+                try:
+                    password_validation.validate_password(newPass)
+                    user = authenticate(username=request.user.username, password=currPass)
+                    if user:
+                        user.set_password(newPass)
+                        user.save()
+                        login(request, user)
                     
                     print('set new password to: '+newPass)
                     return redirect(reverse('edit_profile'))
-
+                except ValidationError:
+                    messages.add_message(request, messages.ERROR, "Please enter a valid password")
+            else:
+                messages.add_message(request, messages.ERROR, "Password 1 and 2 do not match")
     return render(request, 'bookstore/change_password.html')
+
 
 def book_detail(request):
     return render(request, 'bookstore/book_detail.html')
