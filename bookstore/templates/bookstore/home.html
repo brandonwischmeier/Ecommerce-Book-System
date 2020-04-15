@@ -1,16 +1,15 @@
 {% extends "bookstore/base.html"%}
 {% block content %}
     <h2>Featured Books</h2>
-    <div class="row">
-        <div class="col-md-4 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-4 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-4 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
+		<div class="row">
+        {% for book in books %}
+        	{%if book.cover_picture %}
+        		<a class="nav-link" href='{% url 'book_detail_with_pk' pk=book.pk %}'>
+        			<img src="{{book.cover_picture}}" >
+        		</a>
+        	{% endif %}
+        {% endfor %}
+    	
     </div>
     <h2>New Arrivals</h2>
     <div class="row">
