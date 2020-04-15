@@ -66,18 +66,9 @@
 
         <h4 class="mb-3">Payment</h4>
 
-        <div class="d-block my-3">
-            <div class="custom-control custom-radio">
-                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="">
-                <label class="custom-control-label" for="credit">Credit card</label>
-            </div>
-            <div class="custom-control custom-radio">
-                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input">
-                <label class="custom-control-label" for="debit">Debit card</label>
-            </div>
-            <div class="custom-control custom-radio">
-                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input">
-                <label class="custom-control-label" for="paypal">Paypal</label>
+        <div class="row">
+            <div class="col-md-9 mb-3">
+                {{ form.card_type }}
             </div>
         </div>
         <div class="row">
@@ -100,6 +91,8 @@
                 <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{user.email}}">
             </div>
         </div>
+        <a class="btn obs-button-primary" href="{% url 'edit_password' %}">Change Password</a>
+        <hr>
         <button type="submit" class="btn obs-button-primary">Save</button>
     </form>
 {% endblock content %}

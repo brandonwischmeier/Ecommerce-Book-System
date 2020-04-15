@@ -107,19 +107,9 @@
         <hr class="mb-4">
 
         <h4 class="mb-3">Payment</h4>
-
-        <div class="d-block my-3">
-            <div class="custom-control custom-radio">
-                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="">
-                <label class="custom-control-label" for="credit">Credit card</label>
-            </div>
-            <div class="custom-control custom-radio">
-                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input">
-                <label class="custom-control-label" for="debit">Debit card</label>
-            </div>
-            <div class="custom-control custom-radio">
-                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input">
-                <label class="custom-control-label" for="paypal">Paypal</label>
+        <div class="row">
+            <div class="col-md-9 mb-3">
+                {{ form.card_type }}
             </div>
         </div>
         <div class="row">
@@ -139,7 +129,6 @@
             {{ form.promotion_sign_up }}
             <label class="custom-control-label" for="promote">Sign up for promotions and lattest news.</label>
         </div>
-        {{ form.card_type }}
         <button type="submit" class="btn obs-button-primary">Submit</button>
     </form>
 {% endblock content %}

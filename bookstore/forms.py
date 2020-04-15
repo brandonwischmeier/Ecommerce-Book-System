@@ -38,7 +38,7 @@ class RegisterForm(UserCreationForm):
 
     # Get Payment Info
     card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
-    card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=False)
+    card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=False, widget=forms.Select(attrs={'class' : 'form-control'}))
     exp_date = forms.CharField(label='Expiration Date', required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
 
     def clean_username(self):
@@ -96,7 +96,7 @@ class EditUserForm(UserChangeForm):
     bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602', 'onKeyPress':'if(this.value.length==5) return false;'}))
 
     card_no = forms.CharField(label='Card Number', max_length=20, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
-    card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=False)
+    card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=False, widget=forms.Select(attrs={'class' : 'form-control'}))
     exp_date = forms.CharField(label='Expiration Date', max_length=20, required=False, widget=forms.DateInput(attrs={'class' : 'form-control', 'placeholder' : '02/20/2020'}))
 
     def clean_username(self):
