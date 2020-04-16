@@ -5,79 +5,11 @@
         {% for book in books %}
         	{%if book.cover_picture %}
         		<a class="nav-link" href='{% url 'book_detail_with_pk' pk=book.pk %}'>
-        			<img src="{{book.cover_picture}}" >
+        			<img src="{{book.cover_picture}}" width="240" height="350">
         		</a>
         	{% endif %}
         {% endfor %}
     	
     </div>
-    <h2>New Arrivals</h2>
-    <div class="row">
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-    </div>
-    <h2>All Books</h2>
-    <div class="row">
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-        <div class="col-md-3 obs-book-display">
-            <img src="https://dummyimage.com/730x1040/eee/aaa" />
-        </div>
-    </div>
-    <nav aria-label="...">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
+    
 {% endblock content %}
