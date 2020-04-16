@@ -106,7 +106,7 @@ def register(request):
             if form.cleaned_data.get('card_no') and form.cleaned_data.get('exp_date'):
 
                 card_no = form.cleaned_data.get('card_no')
-                #card_type = form.cleaned_data.get('card_type')
+                card_type = form.cleaned_data.get('card_type')
                 exp_date = form.cleaned_data.get('exp_date')
                 payment = Payment(
                     card_no=base64.b64encode(bytes(card_no, 'ascii')), card_type=card_type, exp_date=base64.b64encode(bytes(exp_date, 'ascii')))
@@ -216,7 +216,7 @@ def edit_profile(request):
 
                 if form.cleaned_data.get('card_no') and form.cleaned_data.get('exp_date'):
                     card_no = form.cleaned_data.get('card_no')
-                    #card_type = form.cleaned_data.get('card_type')
+                    card_type = form.cleaned_data.get('card_type')
                     exp_date = form.cleaned_data.get('exp_date')
                     payment = Payment(
                         card_no=base64.b64encode(bytes(card_no, 'ascii')), card_type=card_type, exp_date=base64.b64encode(bytes(exp_date, 'ascii')))
@@ -256,9 +256,6 @@ def edit_profile(request):
         form.fields['bill_zip_code'].initial = request.user.profile.billing_address.zip_code
 
     if request.user.profile.payment_info:
-        # form.fields['card_no'].initial = request.user.profile.payment_info.card_no 
-        # form.fields['exp_date'].initial = request.user.profile.payment_info.exp_date
-        # form.fields['card_type'].initial = request.user.profile.payment_info.card_type
 
         form.fields['card_no'].initial = str(base64.b64decode(request.user.profile.payment_info.card_no[2:-1]))[2:-1]
         form.fields['exp_date'].initial = str(base64.b64decode(request.user.profile.payment_info.exp_date[2:-1]))[2:-1]
