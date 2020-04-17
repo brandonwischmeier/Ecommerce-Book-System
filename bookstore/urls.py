@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.home, name='bookstore_home'),
     path('register', views.register, name='register'),
     path('confirmation', views.confirmation, name='registration_confirmation'),
+    path('login_failure', views.login_failure, name='login_failure'),
     path('activate/<slug:uidb64>/<slug:token>/',
          views.activate, name='activate'),
     path('book',views.book_detail,name='book_detail'),
