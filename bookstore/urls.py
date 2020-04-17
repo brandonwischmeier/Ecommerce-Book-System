@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 
+appname = 'bookstore'
+
 urlpatterns = [
     path('', views.home, name='bookstore_home'),
     path('register', views.register, name='register'),
@@ -12,6 +14,7 @@ urlpatterns = [
     path('book/(?P<pk>\d+)',views.book_detail,name='book_detail_with_pk'),
     path('search', views.search, name='search'),
     path('cart', views.cart, name='shopping_cart'),
+    path('add/(?P<pk>\d+)', views.add_to_cart, name = 'add_to_cart'),
     path('checkout', views.checkout, name='check_out'),
     path('history', views.history, name='order_history'),
     path('login', views.loginU, name='login'),

@@ -51,19 +51,8 @@ class Book(models.Model):
         db_table = 'book'
         ordering = ('title',)
 
-
-class Cart(models.Model):
-    user = models.ForeignKey('Profile', on_delete=models.CASCADE,
-                             default="")  # Had to add default bc 'user' is a non-nullable field and needs a
-
-    # default; the database needs something to populate existing rows
-
-    class Meta:
-        db_table = 'cart'
-
-
 class Order(models.Model):
-    user = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     payment = models.ForeignKey('Payment', on_delete=models.CASCADE)
     promotion = models.ForeignKey('Promotion', on_delete=models.CASCADE, blank=True, null=True)
     total_price = models.FloatField()
@@ -75,8 +64,8 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    book = models.OneToOneField(Book, on_delete=models.CASCADE, primary_key=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, default="")
+    book = models.OneToOneField(Book, on_delete=models.CASCADE, default="")
     quantity = models.IntegerField()
 
     class Meta:
@@ -85,12 +74,13 @@ class OrderItem(models.Model):
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default="")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, default="")
     quantity = models.IntegerField()
 
     class Meta:
         db_table = 'cart_item'
+        unique_together = (('user', 'book'),)
 
 
 class Payment(models.Model):
@@ -106,16 +96,6 @@ class Payment(models.Model):
 
     class Meta:
         db_table = 'payment'
-
-
-class Transaction(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
-    class Meta:
-        db_table = 'transaction'
-
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

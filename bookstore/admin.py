@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Book, Promotion, Address, Payment, Order, Transaction
+from .models import User, Book, Promotion, Address, Payment, Order, CartItem, OrderItem
 
 from .models import Profile
 
@@ -12,7 +12,8 @@ admin.site.register(Profile)
 admin.site.register(Address)
 admin.site.register(Payment)
 admin.site.register(Order)
-admin.site.register(Transaction)
+admin.site.register(CartItem)
+admin.site.register(OrderItem)
 
 
 class ProfileInline(admin.StackedInline):

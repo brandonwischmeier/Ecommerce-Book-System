@@ -19,7 +19,8 @@
             <strong>Description:</strong>
             <br>
             
-            <form class="form-inline">
+            <form class="form-inline" method="post" action="{% url 'add_to_cart' pk=book.pk %}">
+                {% csrf_token %}
                 <div class="form-group mb-2">
                     <input type="number" class="form-control" id="bookquantity" name="bookquantity" min="1" value="1">
                 </div>

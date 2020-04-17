@@ -3,36 +3,20 @@
     <h2>Shopping Cart</h2>
     <hr>
     <div class="obs-checkout-cart">
-        <div class="obs-checkout-cart-item">
-            <div style="width: 50%; float: left;">Book 1</div>
-            <div style="width: 50%; float: left;">Price: $20</div>
-        </div>
-        <div class="obs-checkout-cart-item-mod">
-            <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
-                id="bookquantity" name="bookquantity" min="1" value="1">
-            <button style="width:40%;" class="btn obs-button-primary">Update</button>
-            <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
-        </div>
-        <div class="obs-checkout-cart-item">
-            <div style="width: 50%; float: left;">Book 2</div>
-            <div style="width: 50%; float: left;">Price: $15</div>
-        </div>
-        <div class="obs-checkout-cart-item-mod">
-            <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
-                id="bookquantity" name="bookquantity" min="1" value="1">
-            <button style="width:40%;" class="btn obs-button-primary">Update</button>
-            <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
-        </div>
-        <div class="obs-checkout-cart-item">
-            <div style="width: 50%; float: left;">Book 3</div>
-            <div style="width: 50%; float: left;">Price: $10</div>
-        </div>
-        <div class="obs-checkout-cart-item-mod">
-            <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
-                id="bookquantity" name="bookquantity" min="1" value="1">
-            <button style="width:40%;" class="btn obs-button-primary">Update</button>
-            <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
-        </div>
+        {% for item in items %}
+            {% if item.book %}
+                <div class="obs-checkout-cart-item">
+                    <div style="width: 50%; float: left;"> {{ item.book.title }} </div>
+                    <div style="width: 50%; float: left;">Price: $20</div>
+                </div>
+                <div class="obs-checkout-cart-item-mod">
+                    <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
+                        id="bookquantity" name="bookquantity" min="1" value="1">
+                    <button style="width:40%;" class="btn obs-button-primary">Update</button>
+                    <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
+                </div>
+            {% endif %}
+        {% endfor %}
         Total: $45
     </div>
 {% endblock content %}

@@ -16,7 +16,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import random
-from .models import Address, Payment, Book
+from .models import Address, Payment, Book, CartItem
 from .forms import EditUserForm, RegisterForm
 from .tokens import confirmation_token
 import base64
@@ -63,7 +63,7 @@ def loginU(request):
 
     else:
         print('Not POST for loginU')
-        # return render(request, 'bookstore/home.html', {})
+        return redirect(reverse('bookstore_home'))
 
 
 def register(request):
@@ -343,9 +343,23 @@ def search(request):
 
     return render(request, 'bookstore/search_view.html', {'books': books})
 
+@login_required
+def add_to_cart(request, pk=None):
+    if pk:
+        book = Book.objects.get(pk=pk)
+    
+    if book:
+        user = request.user
+        cartItem = CartItem(user=user, book=book, quantity=1)
+        cartItem.save()
+        
+    return render(request, 'bookstore/book_detail.html', {'book': book})
 
+@login_required
 def cart(request):
-    return render(request, 'bookstore/shopping_cart.html')
+    items = CartItem.objects.filter(user=request.user)
+    
+    return render(request, 'bookstore/shopping_cart.html', {'items': items})
 
 
 def checkout(request):
