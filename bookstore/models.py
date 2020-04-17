@@ -65,12 +65,11 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, default="")
-    book = models.OneToOneField(Book, on_delete=models.CASCADE, default="")
-    quantity = models.IntegerField()
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, default="")
+    quantity = models.IntegerField(primary_key=False)
 
     class Meta:
         db_table = 'order_item'
-        unique_together = (('book', 'order'),)
 
 
 class CartItem(models.Model):

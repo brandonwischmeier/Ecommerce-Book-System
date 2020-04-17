@@ -16,10 +16,12 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import random
-from .models import Address, Payment, Book, CartItem
-from .forms import EditUserForm, RegisterForm
+from .models import Address, Payment, Book, CartItem, Order, OrderItem, Promotion
+from django.db.models import Sum
+from .forms import EditUserForm, RegisterForm, CheckoutForm
 from .tokens import confirmation_token
 import base64
+import datetime
 from lib2to3.fixes.fix_input import context
 # Create your views here.
 
@@ -331,7 +333,7 @@ def search(request):
             results = Book.objects.filter(isbn__icontains=search_text).distinct()
             print('got isbn results seaching with: '+search_text)
         else:
-            results = Book.objects.all()
+            results = []
         
     else:
         results = Book.objects.all()
@@ -365,9 +367,71 @@ def cart(request):
     
     return render(request, 'bookstore/shopping_cart.html', {'items': items})
 
-
+@login_required
 def checkout(request):
-    return render(request, 'bookstore/check_out.html')
+    items = CartItem.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            print('form valid')
+            card_no = form.cleaned_data.get('card_no')
+            card_type = form.cleaned_data.get('card_type')
+            exp_date = form.cleaned_data.get('exp_date')
+            
+            payment = Payment(
+                card_no=base64.b64encode(bytes(card_no, 'ascii')), card_type=card_type, exp_date=base64.b64encode(bytes(exp_date, 'ascii')))
+            payment.save()
+
+            print('saved payment info at: ' + str(payment))
+
+            total = 0.0
+            for item in items:
+                total += item.book.selling_price * item.quantity
+
+            if form.cleaned_data.get('promo_code') and form.cleaned_data.get('promo_code') != "":
+                print('searching for promo_code: ' + str(form.cleaned_data.get('promo_code')))
+                promotion = Promotion.objects.filter(promo_code=form.cleaned_data.get('promo_code'))
+                total -= float(promotion.discount) * total
+            else:
+                promotion = None
+
+            order = Order(user=request.user, payment=payment, promotion=promotion, total_price=total, order_date=datetime.date.today(), order_time=datetime.datetime.now().time())
+            order.save()
+
+            print('saved order info at: ' + str(order))
+
+            for item in items:
+                orderItem = OrderItem(order=order, book=item.book, quantity=item.quantity)
+                orderItem.save()
+
+                print('saved order item at: ' + str(orderItem))
+
+            items.delete()
+        else:
+            print('form invalid')
+    else:
+        form = CheckoutForm(instance=request.user)
+
+    if request.user.profile.shipping_address:
+        form.fields['ship_street'].initial = request.user.profile.shipping_address.street
+        form.fields['ship_city'].initial = request.user.profile.shipping_address.city
+        form.fields['ship_state'].initial = request.user.profile.shipping_address.state
+        form.fields['ship_zip_code'].initial = request.user.profile.shipping_address.zip_code
+
+    if request.user.profile.billing_address:
+        form.fields['bill_street'].initial = request.user.profile.billing_address.street
+        form.fields['bill_city'].initial = request.user.profile.billing_address.city
+        form.fields['bill_state'].initial = request.user.profile.billing_address.state
+        form.fields['bill_zip_code'].initial = request.user.profile.billing_address.zip_code
+
+    if request.user.profile.payment_info:
+        form.fields['card_no'].initial = str(base64.b64decode(request.user.profile.payment_info.card_no[2:-1]))[2:-1]
+        form.fields['exp_date'].initial = str(base64.b64decode(request.user.profile.payment_info.exp_date[2:-1]))[2:-1]
+        form.fields['card_type'].initial = request.user.profile.payment_info.card_type
+
+    return render(request, 'bookstore/check_out.html', {'form': form})
 
 
 def history(request):

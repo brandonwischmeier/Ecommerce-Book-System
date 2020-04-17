@@ -2,8 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
-
-from .models import Profile, Address, Payment
+import datetime
+from .models import Profile, Address, Payment, Promotion
 
 class RegisterForm(UserCreationForm):
 
@@ -82,6 +82,7 @@ class EditUserForm(UserChangeForm):
 
     first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'First name', 'required' : '', 'value': ''}))
     last_name = forms.CharField(label='Last Name', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Last name', 'required' : '',}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class' : 'form-control', 'placeholder' : 'example@uga.edu', 'aria-describedby':'emailHelp', 'required' : ''}))
     
     ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'same-address'}))
     promotion_sign_up = forms.BooleanField(label='Sign Up for Promotions', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'promote'}))
@@ -110,6 +111,61 @@ class EditUserForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'ship_is_billing', 'promotion_sign_up',
+            'ship_street', 'ship_city', 'ship_state', 'ship_zip_code',
+            'bill_street', 'bill_city', 'bill_state', 'bill_zip_code', 'ship_is_billing',
+            'card_no', 'card_type', 'exp_date')
+
+class CheckoutForm(forms.ModelForm):
+
+    CARD_TYPES = (
+        (1, 'Visa'),
+        (2, 'MasterCard'),
+        (3, 'American Express'),
+    )
+
+    promo_code = forms.CharField(label='Promo Code', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Promo code', 'required' : '', 'value': ''}))
+
+    first_name = forms.CharField(label='First Name', required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'First name', 'required' : '', 'value': ''}))
+    last_name = forms.CharField(label='Last Name', required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Last name', 'required' : '',}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class' : 'form-control', 'placeholder' : 'example@uga.edu', 'aria-describedby':'emailHelp', 'required' : ''}))
+    
+    ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'same-address'}))
+    
+    ship_street = forms.CharField(label='Street', max_length=45, required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
+    ship_city = forms.CharField(label='City', max_length=45, required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
+    ship_state = forms.CharField(label='State', max_length=2, required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
+    ship_zip_code = forms.CharField(label='Zip Code', max_length=5, required=True, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602', 'onKeyPress':'if(this.value.length==5) return false;'}))
+
+    bill_street = forms.CharField(label='Street', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
+    bill_city = forms.CharField(label='City', max_length=45, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
+    bill_state = forms.CharField(label='State', max_length=2, required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
+    bill_zip_code = forms.CharField(label='Zip Code', max_length=5, required=False, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '30602', 'onKeyPress':'if(this.value.length==5) return false;'}))
+
+    card_no = forms.CharField(label='Card Number', max_length=20, required=True, widget=forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : '1234567890123456'}))
+    card_type = forms.ChoiceField(label='Card Type', choices=CARD_TYPES, required=True, widget=forms.Select(attrs={'class' : 'form-control'}))
+    exp_date = forms.CharField(label='Expiration Date', max_length=20, required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '02/20'}))
+
+    def clean_bill_street(self):
+        if not self.data.get('ship_is_billing'):
+            if not self.cleaned_data['bill_street'] or not self.data.get('bill_city') or not self.data.get('bill_state') or not self.data.get('bill_zip_code'):
+                raise  ValidationError("Billing address must be completed")
+        return self.cleaned_data['bill_street']
+
+    def clean_promo_code(self):
+        if self.cleaned_data['promo_code'] and self.cleaned_data['promo_code'] != "":
+            promo = Promotion.objects.filter(promo_code=self.cleaned_data['promo_code'])
+            if not promo:
+                raise  ValidationError("Promo code does not exist")
+            today = datetime.date.today()
+            if today < promo.start_date:
+                raise  ValidationError("This promotion has not started. It will start "+str(promo.start_date))
+            if today > promo.end_date:
+                raise  ValidationError("This promotion ended on "+str(promo.end_date))
+        return self.cleaned_data['promo_code']
+
+    class Meta:
+        model = User
+        fields = ('promo_code', 'first_name', 'last_name', 'email', 'ship_is_billing',
             'ship_street', 'ship_city', 'ship_state', 'ship_zip_code',
             'bill_street', 'bill_city', 'bill_state', 'bill_zip_code', 'ship_is_billing',
             'card_no', 'card_type', 'exp_date')
