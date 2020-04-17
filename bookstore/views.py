@@ -59,11 +59,11 @@ def loginU(request):
                 return HttpResponse("Your account is inactive.")
         else:
             print("login attempted and failed.")
-            return HttpResponse("invalid login details given")
+            return redirect('login_failure')
 
     else:
         print('Not POST for loginU')
-        # return render(request, 'bookstore/home.html', {})
+    return redirect(reverse('bookstore_home'))
 
 
 def register(request):
@@ -163,6 +163,8 @@ def activate(request, uidb64, token):
 def confirmation(request):
     return render(request, 'bookstore/registration_confirmation.html')
 
+def login_failure(request):
+    return render(request, 'bookstore/login_failure.html')
 
 @login_required
 def special(request):
