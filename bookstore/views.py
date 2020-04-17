@@ -11,17 +11,15 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http.response import HttpResponse
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, FieldDoesNotExist, MultipleObjectsReturned
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import random
-from .models import Address, Payment, Book, CartItem, Order, OrderItem, Promotion
-from django.db.models import Sum
-from .forms import EditUserForm, RegisterForm, CheckoutForm
+from .models import Address, Payment, Book, CartItem
+from .forms import EditUserForm, RegisterForm
 from .tokens import confirmation_token
 import base64
-import datetime
 from lib2to3.fixes.fix_input import context
 # Create your views here.
 
@@ -333,7 +331,7 @@ def search(request):
             results = Book.objects.filter(isbn__icontains=search_text).distinct()
             print('got isbn results seaching with: '+search_text)
         else:
-            results = []
+            results = Book.objects.all()
         
     else:
         results = Book.objects.all()
@@ -356,82 +354,36 @@ def add_to_cart(request, pk=None):
     
     if book:
         user = request.user
-        cartItem = CartItem(user=user, book=book, quantity=1)
-        cartItem.save()
+        
+        quantity=request.POST.get('quantity')
+        if quantity!='':
+            cartItem = CartItem(user=user, book=book, quantity=quantity)
+            cartItem.save()
         
     return render(request, 'bookstore/book_detail.html', {'book': book})
 
 @login_required
-def cart(request):
+def cart(request, pk=None):
     items = CartItem.objects.filter(user=request.user)
+    if request.method == 'POST':
+        quantity=request.POST.get('quantity')
+        if quantity!='':
+            try: item = CartItem.objects.get(user=request.user, book=Book.objects.get(pk=pk))
+            except DoesNotExist:
+                print('none found')
+            except MultipleObjectsReturned:
+                print('multiple found')
+                
+            item.quantity=quantity
+            item.save()
+    else:
+        print('no good')
     
     return render(request, 'bookstore/shopping_cart.html', {'items': items})
 
-@login_required
+
 def checkout(request):
-    items = CartItem.objects.filter(user=request.user)
-
-    if request.method == 'POST':
-        form = CheckoutForm(request.POST, instance=request.user)
-
-        if form.is_valid():
-            print('form valid')
-            card_no = form.cleaned_data.get('card_no')
-            card_type = form.cleaned_data.get('card_type')
-            exp_date = form.cleaned_data.get('exp_date')
-            
-            payment = Payment(
-                card_no=base64.b64encode(bytes(card_no, 'ascii')), card_type=card_type, exp_date=base64.b64encode(bytes(exp_date, 'ascii')))
-            payment.save()
-
-            print('saved payment info at: ' + str(payment))
-
-            total = 0.0
-            for item in items:
-                total += item.book.selling_price * item.quantity
-
-            if form.cleaned_data.get('promo_code') and form.cleaned_data.get('promo_code') != "":
-                print('searching for promo_code: ' + str(form.cleaned_data.get('promo_code')))
-                promotion = Promotion.objects.filter(promo_code=form.cleaned_data.get('promo_code'))
-                total -= float(promotion.discount) * total
-            else:
-                promotion = None
-
-            order = Order(user=request.user, payment=payment, promotion=promotion, total_price=total, order_date=datetime.date.today(), order_time=datetime.datetime.now().time())
-            order.save()
-
-            print('saved order info at: ' + str(order))
-
-            for item in items:
-                orderItem = OrderItem(order=order, book=item.book, quantity=item.quantity)
-                orderItem.save()
-
-                print('saved order item at: ' + str(orderItem))
-
-            items.delete()
-        else:
-            print('form invalid')
-    else:
-        form = CheckoutForm(instance=request.user)
-
-    if request.user.profile.shipping_address:
-        form.fields['ship_street'].initial = request.user.profile.shipping_address.street
-        form.fields['ship_city'].initial = request.user.profile.shipping_address.city
-        form.fields['ship_state'].initial = request.user.profile.shipping_address.state
-        form.fields['ship_zip_code'].initial = request.user.profile.shipping_address.zip_code
-
-    if request.user.profile.billing_address:
-        form.fields['bill_street'].initial = request.user.profile.billing_address.street
-        form.fields['bill_city'].initial = request.user.profile.billing_address.city
-        form.fields['bill_state'].initial = request.user.profile.billing_address.state
-        form.fields['bill_zip_code'].initial = request.user.profile.billing_address.zip_code
-
-    if request.user.profile.payment_info:
-        form.fields['card_no'].initial = str(base64.b64decode(request.user.profile.payment_info.card_no[2:-1]))[2:-1]
-        form.fields['exp_date'].initial = str(base64.b64decode(request.user.profile.payment_info.exp_date[2:-1]))[2:-1]
-        form.fields['card_type'].initial = request.user.profile.payment_info.card_type
-
-    return render(request, 'bookstore/check_out.html', {'form': form})
+    return render(request, 'bookstore/check_out.html')
 
 
 def history(request):
