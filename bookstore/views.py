@@ -11,7 +11,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http.response import HttpResponse
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -356,16 +356,91 @@ def add_to_cart(request, pk=None):
     
     if book:
         user = request.user
-        cartItem = CartItem(user=user, book=book, quantity=1)
-        cartItem.save()
         
+        quantity=request.POST.get('quantity')
+        if quantity!='':
+            quantity = int(quantity)
+            if book.quantity - quantity >= book.minimum_threshold:
+
+                try: 
+
+                    item = CartItem.objects.get(user=user, book=book)
+
+                except ObjectDoesNotExist:
+
+                    cartItem = CartItem(user=user, book=book, quantity=quantity)
+                    cartItem.save()
+                    return render(request, 'bookstore/book_detail.html', {'book': book})
+
+                except MultipleObjectsReturned:
+
+                    print('multiple found, should never happen')
+
+                item.quantity += quantity
+                item.save()
+                
+            else:
+                messages.add_message(request, messages.ERROR, "Not enough books in stock. Only {0} left".format(book.quantity - book.minimum_threshold))
+
+            
     return render(request, 'bookstore/book_detail.html', {'book': book})
 
+
 @login_required
-def cart(request):
+def cart(request, pk=None):
+    if request.method == 'POST':
+        quantity=request.POST.get('quantity')
+        book = Book.objects.get(pk=pk)
+        if quantity!='':
+            quantity = int(quantity)
+            if book:
+                if book.quantity - quantity >= book.minimum_threshold:
+                    try: 
+                        item = CartItem.objects.get(user=request.user, book=Book.objects.get(pk=pk))
+                    except ObjectDoesNotExist:
+                        print('none found')
+                    except MultipleObjectsReturned:
+                        print('multiple found')
+                    item.quantity=quantity
+                    item.save()
+                else:
+                    messages.add_message(request, messages.ERROR, "Not enough books in stock. Only {0} left".format(book.quantity - book.minimum_threshold))
+            else:
+                print('could not find book with given pk')
+        else:
+            print('empty quantity not allowed')
+
     items = CartItem.objects.filter(user=request.user)
+
+    total = 0.0
+    for item in items:
+        total += item.book.selling_price * item.quantity
     
-    return render(request, 'bookstore/shopping_cart.html', {'items': items})
+    return render(request, 'bookstore/shopping_cart.html', {'items': items, 'total': total})
+
+@login_required
+def remove(request, pk=None):
+    if pk:
+        book = Book.objects.get(pk=pk)
+    if book:
+        user = request.user
+
+        try: 
+
+            item = CartItem.objects.get(user=user, book=book)
+
+        except ObjectDoesNotExist:
+
+            print('cart item does not exist, should never happen')
+
+        except MultipleObjectsReturned:
+
+            print('multiple found, should never happen')
+
+        item.delete()
+    return redirect(reverse('shopping_cart'))
+
+
 
 @login_required
 def checkout(request):
@@ -403,12 +478,18 @@ def checkout(request):
             print('saved order info at: ' + str(order))
 
             for item in items:
+                book = Book.objects.get(pk=item.book.pk)
+                book.quantity -= item.quantity
+                book.save()
                 orderItem = OrderItem(order=order, book=item.book, quantity=item.quantity)
                 orderItem.save()
 
-                print('saved order item at: ' + str(orderItem))
+                print('saved order item at: {0}, removed {1} \"{2}\", only {3} left!'.format(str(orderItem), str(item.quantity), str(book.title), str(book.quantity)))
 
             items.delete()
+
+            return render(request, 'bookstore/checkout_success.html', {'total': total})
+
         else:
             print('form invalid')
     else:
@@ -433,6 +514,8 @@ def checkout(request):
 
     return render(request, 'bookstore/check_out.html', {'form': form})
 
+def checkout_success(request):
+    return render(request, 'bookstore/checkout_success.html')
 
 def history(request):
     return render(request, 'bookstore/history_view.html')

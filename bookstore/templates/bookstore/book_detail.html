@@ -10,11 +10,11 @@
             <h2>{{book.title}}</h2>
             
             {% with ''|center:book.rating as range %}
-			{% for _ in range %}
-    			<span class="fa fa-star obs-checked"></span>
-			{% endfor %}
-			{% endwith %}
-			
+            {% for _ in range %}
+                <span class="fa fa-star obs-checked"></span>
+            {% endfor %}
+            {% endwith %}
+            
             <p style="font-size: 25px;">${{book.selling_price}}</p>
             <strong>Description:</strong>
             <br>
@@ -22,9 +22,17 @@
             <form class="form-inline" method="post" action="{% url 'add_to_cart' pk=book.pk %}">
                 {% csrf_token %}
                 <div class="form-group mb-2">
-                    <input type="number" class="form-control" id="bookquantity" name="bookquantity" min="1" value="1">
+                    <input type="number" class="form-control" id="quantity" name="quantity" min="1"
+                         value=1>
                 </div>
                 <button type="submit" class="btn obs-button-primary mb-2 mx-sm-3">Add to Cart</button>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </form>
         </div>
         <ul>
