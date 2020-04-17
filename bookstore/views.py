@@ -16,12 +16,10 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import random
-from .models import Address, Payment, Book, CartItem, Order, OrderItem, Promotion
-from django.db.models import Sum
-from .forms import EditUserForm, RegisterForm, CheckoutForm
+from .models import Address, Payment, Book, CartItem
+from .forms import EditUserForm, RegisterForm
 from .tokens import confirmation_token
 import base64
-import datetime
 from lib2to3.fixes.fix_input import context
 # Create your views here.
 
@@ -333,7 +331,7 @@ def search(request):
             results = Book.objects.filter(isbn__icontains=search_text).distinct()
             print('got isbn results seaching with: '+search_text)
         else:
-            results = []
+            results = Book.objects.all()
         
     else:
         results = Book.objects.all()
@@ -492,27 +490,8 @@ def checkout(request):
 
         else:
             print('form invalid')
-    else:
-        form = CheckoutForm(instance=request.user)
-
-    if request.user.profile.shipping_address:
-        form.fields['ship_street'].initial = request.user.profile.shipping_address.street
-        form.fields['ship_city'].initial = request.user.profile.shipping_address.city
-        form.fields['ship_state'].initial = request.user.profile.shipping_address.state
-        form.fields['ship_zip_code'].initial = request.user.profile.shipping_address.zip_code
-
-    if request.user.profile.billing_address:
-        form.fields['bill_street'].initial = request.user.profile.billing_address.street
-        form.fields['bill_city'].initial = request.user.profile.billing_address.city
-        form.fields['bill_state'].initial = request.user.profile.billing_address.state
-        form.fields['bill_zip_code'].initial = request.user.profile.billing_address.zip_code
-
-    if request.user.profile.payment_info:
-        form.fields['card_no'].initial = str(base64.b64decode(request.user.profile.payment_info.card_no[2:-1]))[2:-1]
-        form.fields['exp_date'].initial = str(base64.b64decode(request.user.profile.payment_info.exp_date[2:-1]))[2:-1]
-        form.fields['card_type'].initial = request.user.profile.payment_info.card_type
-
-    return render(request, 'bookstore/check_out.html', {'form': form})
+    
+    return render(request, 'bookstore/shopping_cart.html', {'items': items})
 
 def checkout_success(request):
     return render(request, 'bookstore/checkout_success.html')
