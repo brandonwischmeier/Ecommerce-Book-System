@@ -50,6 +50,8 @@ def loginU(request):
                     request.session.set_expiry(60 * 60 * 24 * 14) # 14 days
                 else:
                     request.session.set_expiry(0) # 0 days
+                if user.is_superuser:
+                    return redirect('/admin/')
                 return redirect('bookstore_home')
             else:
                 username = request.POST.get('email')
