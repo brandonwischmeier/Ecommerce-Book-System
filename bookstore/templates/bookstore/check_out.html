@@ -2,47 +2,12 @@
 {% block content %}
     <h2>Check Out</h2>
     <hr>
+    <form method="post" action="{% url 'checkout' %}">
+    {% csrf_token %}
     <div class="row">
         <div class="col-md-4 order-md-2 mb-4">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">Your cart</span>
-                <span class="badge badge-secondary badge-pill">3</span>
-            </h4>
-            <div class="obs-checkout-cart">
-                <div class="obs-checkout-cart-item">
-                    <div style="width: 50%; float: left;">Book 1</div>
-                    <div style="width: 50%; float: left;">Price: $20</div>
-                </div>
-                <div class="obs-checkout-cart-item-mod">
-                    <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
-                        id="bookquantity" name="bookquantity" min="1" value="1">
-                    <button style="width:40%;" class="btn obs-button-primary">Update</button>
-                    <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
-                </div>
-                <div class="obs-checkout-cart-item">
-                    <div style="width: 50%; float: left;">Book 2</div>
-                    <div style="width: 50%; float: left;">Price: $15</div>
-                </div>
-                <div class="obs-checkout-cart-item-mod">
-                    <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
-                        id="bookquantity" name="bookquantity" min="1" value="1">
-                    <button style="width:40%;" class="btn obs-button-primary">Update</button>
-                    <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
-                </div>
-                <div class="obs-checkout-cart-item">
-                    <div style="width: 50%; float: left;">Book 3</div>
-                    <div style="width: 50%; float: left;">Price: $10</div>
-                </div>
-                <div class="obs-checkout-cart-item-mod">
-                    <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
-                        id="bookquantity" name="bookquantity" min="1" value="1">
-                    <button style="width:40%;" class="btn obs-button-primary">Update</button>
-                    <button style="width:36%; background-color: red; color:white;" class="btn">Remove</button>
-                </div>
-                Total: $45
-            </div>
             <div class="form-group">
-                <label for="inputPromoCode">Promo Code</label>
+                <label for="promo_code">Promo Code</label>
                 {{ form.promo_code }}
                 {% for error in form.promo_code.errors %}
                         <p style="color: red">{{ error }}</p>
@@ -51,8 +16,6 @@
         </div>
         <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Billing address</h4>
-            <form method="post" action="{% url 'checkout' %}">
-                {% csrf_token %}
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="firstName">First name</label>
@@ -115,7 +78,7 @@
                 <hr class="mb-4">
                 <div class="custom-control custom-checkbox" style="padding-bottom: 15px;">
                     {{ form.ship_is_billing }}
-                    <label class="custom-control-label" for="ship_is_billing">Shipping address is the same as my billing address</label>
+                    <label class="custom-control-label" for="ship_is_billing">Shipping address is billing address.</label>
                 </div>
                 <hr class="mb-4">
 
@@ -143,7 +106,7 @@
 
                 <hr class="mb-4">
                 <button class="btn obs-button-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-            </form>
         </div>
     </div>
+    </form>
 {% endblock content %}

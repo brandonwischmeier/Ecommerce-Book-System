@@ -101,7 +101,7 @@ class EditUserForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'ship_is_billing', 'promotion_sign_up',
+        fields = ('first_name', 'last_name', 'promotion_sign_up',
             'ship_street', 'ship_city', 'ship_state', 'ship_zip_code',
             'bill_street', 'bill_city', 'bill_state', 'bill_zip_code', 'ship_is_billing',
             'card_no', 'card_type', 'exp_date')
@@ -114,14 +114,13 @@ class CheckoutForm(forms.ModelForm):
         (3, 'American Express'),
     )
 
-    promo_code = forms.CharField(label='Promo Code', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Promo code', 'required' : '', 'value': ''}))
+    promo_code = forms.CharField(label='Promo Code', required=False, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Promo code', 'value': ''}))
 
     first_name = forms.CharField(label='First Name', required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'First name', 'required' : '', 'value': ''}))
     last_name = forms.CharField(label='Last Name', required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Last name', 'required' : '',}))
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class' : 'form-control', 'placeholder' : 'example@uga.edu', 'aria-describedby':'emailHelp', 'required' : ''}))
     
-    ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'same-address'}))
-    
+    ship_is_billing = forms.BooleanField(label='Shipping Address is the same as Billing Address', required=False, widget=forms.CheckboxInput(attrs={'class' : 'custom-control-input', 'id':'ship_is_billing', 'checked':''}))
     ship_street = forms.CharField(label='Street', max_length=45, required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : '1234 Main St'}))
     ship_city = forms.CharField(label='City', max_length=45, required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'Athens'}))
     ship_state = forms.CharField(label='State', max_length=2, required=True, widget=forms.TextInput(attrs={'class' : 'form-control', 'placeholder' : 'GA'}))
@@ -143,20 +142,22 @@ class CheckoutForm(forms.ModelForm):
         return self.cleaned_data['bill_street']
 
     def clean_promo_code(self):
-        if self.cleaned_data['promo_code'] and self.cleaned_data['promo_code'] != "":
-            promo = Promotion.objects.filter(promo_code=self.cleaned_data['promo_code'])
-            if not promo:
+        print(self.data.get('promo_code'))
+        if self.data.get('promo_code') and self.data.get('promo_code') != "":
+            print('MADE IT')
+            if not Promotion.objects.filter(promo_code__iexact=self.data.get('promo_code')):
                 raise  ValidationError("Promo code does not exist")
+            promo = Promotion.objects.get(promo_code__iexact=self.data.get('promo_code'))
             today = datetime.date.today()
             if today < promo.start_date:
                 raise  ValidationError("This promotion has not started. It will start "+str(promo.start_date))
             if today > promo.end_date:
                 raise  ValidationError("This promotion ended on "+str(promo.end_date))
-        return self.cleaned_data['promo_code']
+        return self.data.get('promo_code')
 
     class Meta:
         model = User
-        fields = ('promo_code', 'first_name', 'last_name', 'email', 'ship_is_billing',
+        fields = ('promo_code', 'first_name', 'last_name', 'email',
             'ship_street', 'ship_city', 'ship_state', 'ship_zip_code',
             'bill_street', 'bill_city', 'bill_state', 'bill_zip_code', 'ship_is_billing',
             'card_no', 'card_type', 'exp_date')
