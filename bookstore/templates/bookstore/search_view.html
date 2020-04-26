@@ -48,26 +48,26 @@
 {% if books.has_other_pages %}
     <ul class="pagination">
         {% if books.has_previous %}
-            <li class="waves-effect"><a href="?page=
+            <li class="waves-effect page-item"><a class="page-link" href="?page=
                     {{ books.previous_page_number }}"><i
-                    class="material-icons">chevron_left</i></a></li>
+                    class="material-icons ">Previous</i></a></li>
         {% else %}
-            <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+            <li class="disabled"><a href="#!" class="page-link"><i class="material-icons">Previous</i></a></li>
         {% endif %}
         {% for num in books.paginator.page_range %}
             {% if books.number == num %}
-                <li class="active"><a href="#!">{{ num }}</a></li>
+                <li class="active page-item"><a href="#!" class="page-link">{{ num }}</a></li>
             {% else %}
-                <li class="waves-effect"><a
-                        href="?page={{ num }}">{{ num }}</a></li>
+                <li class="waves-effect page-item"><a
+                        href="?page={{ num }}" class="page-link">{{ num }}</a></li>
             {% endif %}
         {% endfor %}
         {% if books.has_next %}
-            <li class="waves-effect"><a
-                    href="?page={{ books.next_page_number }}"><i
-                    class="material-icons">chevron_right</i></a></li>
+            <li class="waves-effect page-item"><a
+                    href="?page={{ books.next_page_number }}" class="page-link"><i
+                    class="material-icons">Next</i></a></li>
         {% else %}
-            <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            <li class="disabled page-item"><a href="#!" class="page-link"><i class="material-icons">Next</i></a></li>
         {% endif %}
     </ul>
 {% endif %}

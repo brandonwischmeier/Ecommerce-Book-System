@@ -112,7 +112,7 @@
                         </li>
                     </ul>
                     
-                    <a href="search"><button class="btn my-sm-0 obs-search-button"
+                    <a href="{% url 'search' %}"><button class="btn my-sm-0 obs-search-button"
                             style="border-left: 1px solid white">Search</button></a>
                 </div>
             </div>
@@ -131,16 +131,13 @@
                 <div class="row">
                     <div class="col-md-4">
                         <h4>About Us</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Arcu non odio euismod lacinia at quis risus sed.</p>
+                        <p>CSCI 4050 - Team 1</p>
                     </div>
                     <div class="col-md-4">
                         <h4>Quick Links</h4>
                         <ul>
                             <li><a href="{% url 'bookstore_home' %}">Home</a></li>
-                            <li><a href="#">Category</a></li>
                             <li><a href="search">Search</a></li>
-                            <li><a href="#">Contact</a></li>
                         </ul>
                     </div>
                     <div class="col-md-4">
