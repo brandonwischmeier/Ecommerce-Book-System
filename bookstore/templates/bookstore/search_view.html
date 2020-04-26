@@ -38,8 +38,11 @@
   </div>
 </form>
 {% for book in books %}
-<p>{{ book.title }}</p>
-<p>{{ book.author }}</p>
+{%if book.cover_picture %}
+        		<a class="nav-link" href='{% url 'book_detail_with_pk' pk=book.pk %}'>
+        			<img src="{{book.cover_picture}}" width="240" height="350">
+        		</a>
+        	{% endif %}
 {% endfor %}
 
 {% if books.has_other_pages %}
