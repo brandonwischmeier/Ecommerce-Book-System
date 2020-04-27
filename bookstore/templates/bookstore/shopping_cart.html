@@ -8,14 +8,14 @@
             {% if item.book %}
                 <div class="obs-checkout-cart-item">
                     <div style="width: 50%; float: left;"> {{ item.book.title }} </div>
-                    <div style="width: 50%; float: left;">{{ item.book.selling_price  }}</div>
+                    <div style="width: 50%; float: left;">Price: ${{ item.book.selling_price  }}</div>
                 </div>
                 <div class="obs-checkout-cart-item-mod">
                     <form method="post" action="{% url 'shopping_cart_with_pk' pk=item.book.pk%}">
                         {% csrf_token %}
-                        <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
-                            id="quantity" name="quantity" min="1" value={{item.quantity}}>
-                        <button style="width:36%;" class="btn obs-button-primary" type="submit">Update</button>
+                        Quantity: <input style="width:20%; display: inline; margin: 0;border: none; padding-left: 10px;" type="number"
+                            id="quantity" name="quantity" min="1" value={{item.quantity}}><br>
+                        <button style="width:32%;" class="btn obs-button-primary" type="submit">Update</button>
                         {% if messages %}
                             <ul class="messages">
                                 {% for message in messages %}
